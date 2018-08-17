@@ -1,5 +1,5 @@
 {
-    "/api":{
+    "/api/register":{
         "target":"http://localhost:1234",
         "secure":false,
         "changeOrigin":true

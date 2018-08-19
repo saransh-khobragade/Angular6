@@ -13,7 +13,7 @@ export class AuthService {
   constructor(private http:HttpClient) { }
 
   getUserDetails(username,password){
-    return this.http.post<register>('/api/register',{username,password}).subscribe(data=>{console.log(data)});
+    return this.http.post<register>('/api/register',{email:username,password}).subscribe(data=>{console.log(data)});
     
   }
 }

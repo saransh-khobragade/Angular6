@@ -1,0 +1,8 @@
+1.For running angular:
+\LoginApp folder >npm start
+
+2.For running node.js server
+\LoginApp\src\server folder >node index.js
+
+3.For running mongo db
+>mongo in cmd

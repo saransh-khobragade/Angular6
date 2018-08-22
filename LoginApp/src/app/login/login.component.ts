@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,7 +9,12 @@ import { AuthService } from '../auth.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private Auth:AuthService) { }
+  username="saransh@gmail.com";
+  password="12345";
+
+  constructor(private Auth:AuthService,private router:Router) { 
+    
+  }
 
   ngOnInit() {
   }
@@ -16,12 +22,20 @@ export class LoginComponent implements OnInit {
   loginUser(event){
     event.preventDefault();
     const target = event.target;
-    const username = target.querySelector('#username').value;
-    const password = target.querySelector('#password').value;
 
-    this.Auth.getUserDetails(username,password);
+    //const username = target.querySelector('#username').value;
+    //const password = target.querySelector('#password').value;
 
-    //console.log(username,password);
+    this.Auth.getUserDetails(this.username,this.password).subscribe(data=>{
+      if(data.success){
+        this.router.navigate(['admin']);
+      }
+      else
+      {
+        alert(data.message);
+      }
+    });
+
   }
 
 }

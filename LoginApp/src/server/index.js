@@ -24,7 +24,7 @@ app.post('/api/login',async (req,res)=>{		//login API
     if(!result){
         return res.status(404).json({message:'Email/Password incorrect'})
     }
-	res.json({message:'Login Success'})
+	res.json({success:true,message:'Login Success'})
     req.session.user = email
     req.session.save()
 })
@@ -32,7 +32,7 @@ app.post('/api/login',async (req,res)=>{		//login API
 app.get('/api/isUserLoggedIn',(req,res)=>{
     res.json({
         status:!!req.session.user
-        //status: req.session.user?true:false
+         //status: req.session.user?true:false
     })
 })
 

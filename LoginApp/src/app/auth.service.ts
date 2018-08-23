@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { Observable } from '../../node_modules/rxjs';
 
+
 interface register{
   success:boolean,
   message:string
@@ -22,7 +23,7 @@ interface isLoggedIn{
 })
 export class AuthService {
 
-  private LoggedInStatus = false;
+  private LoggedInStatus:boolean;
 
   constructor(private http:HttpClient) { }
 
@@ -30,12 +31,12 @@ export class AuthService {
     this.LoggedInStatus=value;
   }
 
-  get isLoggedIn(){
+  get isLoggedIn():boolean{
     return this.LoggedInStatus;
   }
 
-  getUserDetails(username,password){
-    return this.http.post<register>('/api/register',{email:username,password});
+  isUser(username,password){
+    return this.http.post<register>('/api/login',{email:username,password});
   }
 
   isUserLoggedIn():Observable<isLoggedIn>{

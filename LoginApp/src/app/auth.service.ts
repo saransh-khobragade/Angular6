@@ -7,6 +7,12 @@ interface register{
   message:string
 }
 
+interface profile{
+  success:boolean,
+  email:string,
+  message:string
+}
+
 interface isLoggedIn{
   status:boolean
 }
@@ -34,5 +40,9 @@ export class AuthService {
 
   isUserLoggedIn():Observable<isLoggedIn>{
     return this.http.get<isLoggedIn>('/api/isUserLoggedIn')
+  }
+
+  getUserProfile():Observable<profile>{
+    return this.http.get<profile>('/api/profile')
   }
 }

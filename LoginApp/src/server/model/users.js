@@ -1,8 +1,12 @@
 const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
-    email:String,
-    password:String
+    name:String,
+	email:String,
+    password:String,
+	phone:Number,
+	gender:String,
+	dob:String
 })
 
 const User = mongoose.model('User',UserSchema)

@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
     else{
-      this.auth.isUserLoggedIn().pipe(map(res=>{
+      return this.auth.isUserLoggedIn().pipe(map(res=>{
         if(res.status){
           this.auth.setLoggedIn(true)
           return true

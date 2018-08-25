@@ -11,7 +11,7 @@ app.use(session({
 }))
 
 mongoose.Promise = Promise
-mongoose.connect('mongodb://localhost:27017/Angular6')
+mongoose.connect('mongodb://localhost:27017/Angular6', { useNewUrlParser: true })
 .then(()=>console.log('Mongoose up'))
 
 const User = require('./model/users')
@@ -50,6 +50,18 @@ app.get('/api/profile',async (req,res)=>{
     })
 })
 
+app.get('/api/isUserExist/:email', async (req, res) =>{		//register API(create user)
+	User.findOne({email:req.params.email},(function (err, result) {
+		if (err) {
+			return res.status(500).json({message: 'omething wemt wrong'})
+		} else if(result){
+			return res.status(400).json({message: 'User already exists'})
+		}
+		return res.status(200).json({message: 'User doesn\'t exists'})
+	}))
+    
+})
+
 app.post('/api/user', async (req, res) =>{		//register API(create user)
 	const{name, email, password, phone, gender, dob} = req.body
 	const result = await User.findOne({email})
@@ -67,7 +79,7 @@ app.post('/api/user', async (req, res) =>{		//register API(create user)
 })
 
 app.get('/api/getAllUsers', async (req, res)=>{			// get all users
-	User.find(function (err, users) {
+	User.find({}, 'name email phone gender dob', function (err, users) {
 		if(err) {
 			return res.status(500).json({message: 'Something went wrong'})
 		}
@@ -110,7 +122,7 @@ app.put('/api/user/:email', async (req, res)=>{			// update user details
 })
 
 app.delete('/api/user/:email',async (req,res)=>{		//delete user
-    User.remove({ email:req.params.email }, function (err) {  
+    User.deleteOne({ email:req.params.email }, function (err) {  
         if (err) {  
             return res.status(500).json({message:'Something went wrong'})  
         }  

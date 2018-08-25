@@ -3,6 +3,17 @@ const bodyparser = require('body-parser')
 const app = express()
 const mongoose = require('mongoose')
 const session = require('express-session')
+const multer = require('multer')
+
+const storage = multer.diskStorage({
+	destination: function(req, file, callback) {
+		callback(null, './uploads/');
+	},
+	filename: function(req, file, callback){
+		callback(null, file.originalname)
+	}
+})
+const upload = multer({storage: storage})
 
 app.use(session({
     secret: 'ksjldklahshjsljksjkxshjchosjckspcgusjvghhdafhjsbjknsldjl',
@@ -15,6 +26,7 @@ mongoose.connect('mongodb://localhost:27017/Angular6', { useNewUrlParser: true }
 .then(()=>console.log('Mongoose up'))
 
 const User = require('./model/users')
+const ProfilePicture = require('./model/profilepicture')
 
 app.use(bodyparser.json())
 
@@ -50,10 +62,10 @@ app.get('/api/profile',async (req,res)=>{
     })
 })
 
-app.get('/api/isUserExist/:email', async (req, res) =>{		//checking for existing user
+app.get('/api/isUserExist/:email', async (req, res) =>{		//register API(create user)
 	User.findOne({email:req.params.email},(function (err, result) {
 		if (err) {
-			return res.status(500).json({message: 'Something wemt wrong'})
+			return res.status(500).json({message: 'omething wemt wrong'})
 		} else if(result){
 			return res.status(400).json({message: 'User already exists'})
 		}
@@ -64,14 +76,10 @@ app.get('/api/isUserExist/:email', async (req, res) =>{		//checking for existing
 
 app.post('/api/user', async (req, res) =>{		//register API(create user)
 	const{name, email, password, phone, gender, dob} = req.body
-	User.findOne({email:req.params.email},(function (err, result) {
-		if (err) {
-			return res.status(500).json({message: 'omething wemt wrong'})
-		} else if(result){
-			return res.status(400).json({message: 'User already exists'})
-		}
-		return res.status(200).json({message: 'User doesn\'t exists'})
-	}))
+	const result = await User.findOne({email})
+    if(result){
+        return res.status(400).json({message: 'User already exists'})
+    }
 
 	const user = new User({name, email, password, phone, gender, dob})
 	user.save(function (err) {  
@@ -132,6 +140,25 @@ app.delete('/api/user/:email',async (req,res)=>{		//delete user
         }  
         return res.json({ message: 'Successfully deleted' });  
     })  
+})
+
+app.post('/api/profile/image/:email', upload.single('profilePicture'), async (req, res)=> {
+	console.log(req.file)
+	const email = req.params.email
+	User.findOne({email}, function(err, user) {		//change params to session
+		if(err){
+			return res.status(500).json({message:'Something went wrong'})
+		}
+		else if(!user){
+			return res.status(404).json({message: 'User not found'})
+		}
+		const dp = new ProfilePicture({email, path: req.file.destination+req.file.filename})
+		dp.save(function(err){
+		if(err)
+			return res.status(500).json('Something went wrong')
+		return res.json({message: 'Profile picture saved successfully'})
+		})
+	})
 })
 
 app.listen(1234,()=>console.log('server listening at 1234'))

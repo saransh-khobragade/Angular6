@@ -1,14 +1,14 @@
 import { Component} from '@angular/core';
 import { FormGroup,FormControl,Validators,FormArray,FormBuilder} from '@angular/forms';
 import { Observable } from 'rxjs';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.css']
 })
-export class RegisterComponent {
+export class SignupComponent {
   
   myForm:FormGroup;
   items:FormArray;
@@ -30,7 +30,6 @@ export class RegisterComponent {
   onSubmit(){
     this.auth.registerUser(this.myForm.value.username,this.myForm.value.email,this.myForm.value.password,this.myForm.value.phone,this.myForm.value.gender,this.myForm.value.birthday)
     .subscribe(data=>console.log(data));
-    //this.myForm.reset();
   }
 
   CustomValidation(component:FormControl){
@@ -59,5 +58,6 @@ export class RegisterComponent {
     );
     return promise;
   }
+
 
 }

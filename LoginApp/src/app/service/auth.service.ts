@@ -1,20 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
-import { Observable } from '../../node_modules/rxjs';
-
+import { Observable } from '../../../node_modules/rxjs';
 
 interface register{
   success:boolean,
   message:string
-}
-
-interface user{
-  username:boolean,
-  password:string,
-  email:string,
-  number:number,
-  birthday:string,
-  gender:string
 }
 
 interface profile{

@@ -53,7 +53,7 @@ app.get('/api/profile',async (req,res)=>{
 app.get('/api/isUserExist/:email', async (req, res) =>{		//register API(create user)
 	User.findOne({email:req.params.email},(function (err, result) {
 		if (err) {
-			return res.status(500).json({message: 'omething wemt wrong'})
+			return res.status(500).json({message: 'Something went wrong'})
 		} else if(result){
 			return res.status(400).json({message: 'User already exists'})
 		}

@@ -1,0 +1,6 @@
+<form (submit)="loginUser($event)">
+    <input type="text" placeholder="Username" id="username" value={{username}}>
+    <input type="text" placeholder="Password" id="password" value={{password}}>
+    <input type="submit" value="Login">
+    <a [routerLink]="['../signup']"><button>Sign up</button></a>
+  </form>

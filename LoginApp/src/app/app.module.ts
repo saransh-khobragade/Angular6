@@ -2,31 +2,41 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
-import { AuthService } from './auth.service';
+import { AuthService } from './service/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from './auth.guard';
-import { ProfileComponent } from './profile/profile.component';
-import { RegisterComponent } from './register/register.component';
 import { ReactiveFormsModule,FormsModule} from '@angular/forms';
+import { HeaderComponent } from './home/header/header.component';
+import { ChatComponent } from './home/chat/chat.component';
+import { DetailComponent } from './home/detail/detail.component';
+import { Routing } from './app.route';
+import { BoardComponent } from './home/board/board.component';
+import { LoginComponent } from './home/login/login.component';
+import { HomeComponent } from './home/home.component';
+import { SignupComponent } from './home/signup/signup.component';
+import { ProfileComponent } from './home/profile/profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
     HomeComponent,
+    HeaderComponent,
+    ChatComponent,
+    DetailComponent,
+    BoardComponent,
+    LoginComponent,
     ProfileComponent,
-    RegisterComponent
+    SignupComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
-    RouterModule.forRoot([
+    RouterModule.forRoot(
+       [
       {
-        path: 'login',
+         path: 'login',
         component: LoginComponent
       },
       {
@@ -35,14 +45,20 @@ import { ReactiveFormsModule,FormsModule} from '@angular/forms';
         canActivate:[AuthGuard]
       },
       {
-        path: 'register',
-        component:RegisterComponent
+        path: 'signup',
+        component:SignupComponent
       },
       {
         path: '',
-        component:HomeComponent
+        component:LoginComponent
+      },
+      {
+        path: '**',
+        component:LoginComponent
       }
-    ])
+    ] 
+  
+  )
   ],
   providers: [AuthService,AuthGuard],
   bootstrap: [AppComponent]

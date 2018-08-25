@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../service/auth.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+
+  
 
   username="saransh@gmail.com";
   password="12345";
@@ -39,5 +41,6 @@ export class LoginComponent implements OnInit {
     });
 
   }
+
 
 }

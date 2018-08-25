@@ -1,4 +1,38 @@
-<p>
-  home works!
-  <a routerLink="/login">Login</a>
-</p>
+<app-header></app-header>
+
+  
+<div class="container text-center">    
+  <div class="row">
+    <div class="col-sm-3 well">
+
+      <app-detail></app-detail>
+
+    </div>
+    <div class="col-sm-7">
+    
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default text-left">
+            <div class="panel-body">
+              <p contenteditable="true">Status: Feeling Blue</p>
+              <button type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-thumbs-up"></span> Like
+              </button>     
+            </div>
+          </div>
+        </div>
+      </div>
+     <!--  <app-login></app-login> -->
+      <!-- <app-statusboard></app-statusboard> -->
+      <router-outlet></router-outlet>
+
+    </div>
+    <div class="col-sm-2 well">
+      <app-chat></app-chat>
+    </div>
+  </div>
+</div>
+
+<footer class="container-fluid text-center">
+  <p>Footer Text</p>
+</footer>

@@ -56,7 +56,7 @@ export class AuthService {
     return this.http.get<profile>('/api/profile')
   }
 
-  registerUser(username ,email,password,phone,gender,dob){
-    return this.http.post<register>('/api/user',{username ,email,password,phone,gender,dob});
+  registerUser(username,email,password,phone,gender,dob){
+    return this.http.post<register>('/api/user',{name:username,email,password,phone,gender,dob});
   }
 }

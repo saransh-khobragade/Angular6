@@ -8,18 +8,22 @@ import { AuthService } from './auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from './auth.guard';
 import { ProfileComponent } from './profile/profile.component';
-
+import { RegisterComponent } from './register/register.component';
+import { ReactiveFormsModule,FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomeComponent,
-    ProfileComponent
+    ProfileComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    ReactiveFormsModule,
+    FormsModule,
     RouterModule.forRoot([
       {
         path: 'login',
@@ -29,6 +33,10 @@ import { ProfileComponent } from './profile/profile.component';
         path: 'profile',
         component:ProfileComponent,
         canActivate:[AuthGuard]
+      },
+      {
+        path: 'register',
+        component:RegisterComponent
       },
       {
         path: '',

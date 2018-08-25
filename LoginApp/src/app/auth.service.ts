@@ -8,6 +8,15 @@ interface register{
   message:string
 }
 
+interface user{
+  username:boolean,
+  password:string,
+  email:string,
+  number:number,
+  birthday:string,
+  gender:string
+}
+
 interface profile{
   success:boolean,
   email:string,
@@ -45,5 +54,9 @@ export class AuthService {
 
   getUserProfile():Observable<profile>{
     return this.http.get<profile>('/api/profile')
+  }
+
+  registerUser(username ,email,password,phone,gender,dob){
+    return this.http.post<register>('/api/user',{username ,email,password,phone,gender,dob});
   }
 }

@@ -50,10 +50,10 @@ app.get('/api/profile',async (req,res)=>{
     })
 })
 
-app.get('/api/isUserExist/:email', async (req, res) =>{		//register API(create user)
+app.get('/api/isUserExist/:email', async (req, res) =>{		//checking for existing user
 	User.findOne({email:req.params.email},(function (err, result) {
 		if (err) {
-			return res.status(500).json({message: 'omething wemt wrong'})
+			return res.status(500).json({message: 'Something wemt wrong'})
 		} else if(result){
 			return res.status(400).json({message: 'User already exists'})
 		}
@@ -64,10 +64,14 @@ app.get('/api/isUserExist/:email', async (req, res) =>{		//register API(create u
 
 app.post('/api/user', async (req, res) =>{		//register API(create user)
 	const{name, email, password, phone, gender, dob} = req.body
-	const result = await User.findOne({email})
-    if(result){
-        return res.status(400).json({message: 'User already exists'})
-    }
+	User.findOne({email:req.params.email},(function (err, result) {
+		if (err) {
+			return res.status(500).json({message: 'omething wemt wrong'})
+		} else if(result){
+			return res.status(400).json({message: 'User already exists'})
+		}
+		return res.status(200).json({message: 'User doesn\'t exists'})
+	}))
 
 	const user = new User({name, email, password, phone, gender, dob})
 	user.save(function (err) {  

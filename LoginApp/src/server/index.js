@@ -34,7 +34,7 @@ app.post('/api/login',async (req,res)=>{		//login API
     const{email,password}=req.body
     const result = await User.findOne({email,password})
     if(!result){
-        return res.status(404).json({message:'Email/Password incorrect'})
+        return res.json({success:false, message:'Email/Password incorrect'})
     }
 	res.json({success:true,message:'Login Success'})
     req.session.user = email
@@ -51,7 +51,7 @@ app.get('/api/isUserLoggedIn',(req,res)=>{
 app.get('/api/profile',async (req,res)=>{
     const user = await User.findOne({email:req.session.user})
     if(!user){
-        return res.status(400).json({
+        return res.json({
             success:false,
             message:'user was deleted'
         })
@@ -65,11 +65,11 @@ app.get('/api/profile',async (req,res)=>{
 app.get('/api/isUserExist/:email', async (req, res) =>{		//register API(create user)
 	User.findOne({email:req.params.email},(function (err, result) {
 		if (err) {
-			return res.status(500).json({message: 'omething wemt wrong'})
+			return res.json({success:false, message: 'omething wemt wrong'})
 		} else if(result){
-			return res.status(400).json({message: 'User already exists'})
+			return res.json({success:false, message: 'User already exists'})
 		}
-		return res.status(200).json({message: 'User doesn\'t exists'})
+		return res.json({success:true, message: 'User doesn\'t exists'})
 	}))
     
 })
@@ -78,22 +78,22 @@ app.post('/api/user', async (req, res) =>{		//register API(create user)
 	const{fname, lname, email, password, phone, gender, dob} = req.body
 	const result = await User.findOne({email})
     if(result){
-        return res.status(400).json({message: 'User already exists'})
+        return res.json({success:false, message: 'User already exists'})
     }
 
 	const user = new User({fname, lname, email, password, phone, gender, dob})
 	user.save(function (err) {  
         if (err) {  
-            return res.status(500).json({message:'Something went wrong'})  
+            return res.json({success:false, message:'Something went wrong'})  
         }  
-        return res.json({message:'Registration successful'})  
+        return res.json({success:true, message:'Registration successful'})  
     })
 })
 
 app.get('/api/getAllUsers', async (req, res)=>{			// get all users
 	User.find({}, 'name email phone gender dob', function (err, users) {
 		if(err) {
-			return res.status(500).json({message: 'Something went wrong'})
+			return res.json({success:false, message: 'Something went wrong'})
 		}
 		return res.json(users)		
 	}).select('fname lname email phone gender dob')
@@ -102,10 +102,10 @@ app.get('/api/getAllUsers', async (req, res)=>{			// get all users
 app.get('/api/user/:email', async (req, res)=>{			// get user with id
 	User.findOne({email:req.params.email}, function (err, user) {
 		if(err) {
-			return res.status(500).json({message: 'Something went wrong'})
+			return res.json({success:false, message: 'Something went wrong'})
 		}
 		else if(!user){
-			return res.status(404).json({message: 'User not found'})
+			return res.json({success:false, message: 'User not found'})
 		}
 		return res.json(user)		
 	})
@@ -114,10 +114,10 @@ app.get('/api/user/:email', async (req, res)=>{			// get user with id
 app.put('/api/user/:email', async (req, res)=>{			// update user details
 	User.findOne({email:req.params.email}, function(err, user) {
 		if(err){
-			return res.status(500).json({message:'Something went wrong'})
+			return res.json({success:false, message:'Something went wrong'})
 		}
 		else if(!user){
-			return res.status(404).json({message: 'User not found'})
+			return res.json({success:false, message: 'User not found'})
 		}
 		user.fname = req.body.fname
 		user.lname = req.body.lname
@@ -127,9 +127,9 @@ app.put('/api/user/:email', async (req, res)=>{			// update user details
 		user.dob = req.body.dob
 		user.save(function(err){
 			if(err){
-				return res.status(500).json({message:'Something went wrong'})
+				return res.json({success:false, message:'Something went wrong'})
 			}
-			return res.json({message:'User details updated successfully'})
+			return res.json({success:true, message:'User details updated successfully'})
 		})
 	})
 })
@@ -137,9 +137,9 @@ app.put('/api/user/:email', async (req, res)=>{			// update user details
 app.delete('/api/user/:email',async (req,res)=>{		//delete user
     User.deleteOne({ email:req.params.email }, function (err) {  
         if (err) {  
-            return res.status(500).json({message:'Something went wrong'})  
+            return res.json({success:false, message:'Something went wrong'})  
         }  
-        return res.json({ message: 'Successfully deleted' });  
+        return res.json({success:true, message: 'Successfully deleted' });  
     })  
 })
 
@@ -148,16 +148,16 @@ app.post('/api/profile/image/:email', upload.single('profilePicture'), async (re
 	const email = req.params.email
 	User.findOne({email}, function(err, user) {		//change params to session
 		if(err){
-			return res.status(500).json({message:'Something went wrong'})
+			return res.json({success:false, message:'Something went wrong'})
 		}
 		else if(!user){
-			return res.status(404).json({message: 'User not found'})
+			return res.json({success:false, message: 'User not found'})
 		}
 		const dp = new ProfilePicture({email, path: req.file.destination+req.file.filename})
 		dp.save(function(err){
 		if(err)
-			return res.status(500).json('Something went wrong')
-		return res.json({message: 'Profile picture saved successfully'})
+			return res.json({success:false, message:'Something went wrong')
+		return res.json({success:true, message: 'Profile picture saved successfully'})
 		})
 	})
 })

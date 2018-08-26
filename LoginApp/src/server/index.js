@@ -13,7 +13,22 @@ const storage = multer.diskStorage({
 		callback(null, file.originalname)
 	}
 })
-const upload = multer({storage: storage})
+
+const filter = (req, file, callback) => {
+	if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+		callback(null, true)
+	}else{
+		callback('File type not supported', false)
+	}
+}
+
+const upload = multer({
+	storage: storage,
+	limits: {
+		fileSize: 1024 * 1024 * 5
+	},
+	fileFilter: filter
+})
 
 app.use(session({
     secret: 'ksjldklahshjsljksjkxshjchosjckspcgusjvghhdafhjsbjknsldjl',
@@ -91,7 +106,7 @@ app.post('/api/user', async (req, res) =>{		//register API(create user)
 })
 
 app.get('/api/getAllUsers', async (req, res)=>{			// get all users
-	User.find({}, 'name email phone gender dob', function (err, users) {
+	User.find({}, function (err, users) {
 		if(err) {
 			return res.json({success:false, message: 'Something went wrong'})
 		}
@@ -108,8 +123,8 @@ app.get('/api/user/:email', async (req, res)=>{			// get user with id
 			return res.json({success:false, message: 'User not found'})
 		}
 		return res.json(user)		
-	})
-}).select('fname lname email phone gender dob')
+	}).select('fname lname email phone gender dob')
+})
 
 app.put('/api/user/:email', async (req, res)=>{			// update user details
 	User.findOne({email:req.params.email}, function(err, user) {
@@ -145,8 +160,8 @@ app.delete('/api/user/:email',async (req,res)=>{		//delete user
 
 app.post('/api/profile/image/:email', upload.single('profilePicture'), async (req, res)=> {
 	console.log(req.file)
-	const email = req.params.email
-	User.findOne({email}, function(err, user) {		//change params to session
+	const email = req.session.email
+	User.findOne({email}, function(err, user) {		
 		if(err){
 			return res.json({success:false, message:'Something went wrong'})
 		}
@@ -156,7 +171,7 @@ app.post('/api/profile/image/:email', upload.single('profilePicture'), async (re
 		const dp = new ProfilePicture({email, path: req.file.destination+req.file.filename})
 		dp.save(function(err){
 		if(err)
-			return res.json({success:false, message:'Something went wrong')
+			return res.json({success:false, message:'Something went wrong'})
 		return res.json({success:true, message: 'Profile picture saved successfully'})
 		})
 	})

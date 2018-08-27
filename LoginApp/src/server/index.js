@@ -82,9 +82,9 @@ app.get('/api/isUserExist/:email', async (req, res) =>{		//register API(create u
 		if (err) {
 			return res.json({success:false, message: 'omething wemt wrong'})
 		} else if(result){
-			return res.json({success:false, message: 'User already exists'})
+			return res.json({success:true, message: 'User already exists'})
 		}
-		return res.json({success:true, message: 'User doesn\'t exists'})
+		return res.json({success:false, message: 'User doesn\'t exists'})
 	}))
     
 })

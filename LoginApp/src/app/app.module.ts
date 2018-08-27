@@ -9,12 +9,12 @@ import { ReactiveFormsModule,FormsModule} from '@angular/forms';
 import { HeaderComponent } from './home/header/header.component';
 import { ChatComponent } from './home/chat/chat.component';
 import { DetailComponent } from './home/detail/detail.component';
-import { Routing } from './app.route';
 import { BoardComponent } from './home/board/board.component';
-import { LoginComponent } from './home/login/login.component';
+import { LoginComponent } from './home/board/login/login.component';
 import { HomeComponent } from './home/home.component';
-import { SignupComponent } from './home/signup/signup.component';
-import { ProfileComponent } from './home/profile/profile.component';
+import { SignupComponent } from './home/board/signup/signup.component';
+import { ProfileComponent } from './home/board/profile/profile.component';
+import { StatusComponent } from './home/board/status/status.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,8 @@ import { ProfileComponent } from './home/profile/profile.component';
     BoardComponent,
     LoginComponent,
     ProfileComponent,
-    SignupComponent
+    SignupComponent,
+    StatusComponent
   ],
   imports: [
     BrowserModule,

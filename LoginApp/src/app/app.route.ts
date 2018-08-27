@@ -1,4 +1,4 @@
-import {RouterModule, Routes} from '@angular/router';
+/* import {RouterModule, Routes} from '@angular/router';
 import { LoginComponent } from './home/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './home/signup/signup.component';
@@ -12,4 +12,4 @@ const APP_ROUTES: Routes = [
 
 ];
 
-export const Routing = RouterModule.forRoot(APP_ROUTES);
+export const Routing = RouterModule.forRoot(APP_ROUTES); */

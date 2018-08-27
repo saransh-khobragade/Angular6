@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../../service/auth.service';
@@ -8,12 +8,12 @@ import { AuthService } from '../../../service/auth.service';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent {
+export class SignupComponent{
 
   myForm: FormGroup;
   genders = ['male', 'female'];
   usercreated: boolean = false;
-
+  
   constructor(private auth: AuthService) {
 
     this.myForm = new FormGroup(
@@ -52,15 +52,12 @@ export class SignupComponent {
 
   asyncValidator(control: FormControl): Promise<any> | Observable<any> {
 
-    console.log(control.value);
-
-    //console.log(this.auth.isUserExists('saransh98@gmail.com'));
+    console.log(this.auth.isUserExists('saransh98@gmail.com'));
 
     const promise = new Promise<any>(
       (resolve, reject) => {
         setTimeout(() => {
           if (control.value === 'Example') {
-            console.log('hi');
             resolve({ 'invalid': true });
           }
           else {

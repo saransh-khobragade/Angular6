@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { Observable } from '../../../node_modules/rxjs';
+import { promise } from '../../../node_modules/protractor';
+import {map} from 'rxjs/operators';
 
 interface register {
   success: boolean,
@@ -14,6 +16,10 @@ interface profile {
 }
 
 interface isLoggedIn {
+  status: boolean
+}
+
+interface userCheck {
   status: boolean
 }
 
@@ -38,8 +44,9 @@ export class AuthService {
     return this.http.post<register>('/api/login', { email: username, password });
   }
 
-  isUserExists(email) {
-    return this.http.get('/api/isUserExist', {params:email});
+  isUserExists(email) : Observable<userCheck>{
+    console.log("hi")
+    return this.http.get<userCheck>('/api/isUserExist', {params:email}).map((res: Response) => res.json());
   }
 
   isUserLoggedIn(): Observable<isLoggedIn> {

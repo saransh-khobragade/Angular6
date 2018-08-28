@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../../service/auth.service';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-signup',
@@ -13,8 +14,10 @@ export class SignupComponent{
   myForm: FormGroup;
   genders = ['male', 'female'];
   usercreated: boolean = false;
+  static Async:AuthService
   
   constructor(private auth: AuthService) {
+    SignupComponent.Async=auth
 
     this.myForm = new FormGroup(
     {
@@ -50,24 +53,12 @@ export class SignupComponent{
     else return null ;
   }
 
-  asyncValidator(control: FormControl): Promise<any> | Observable<any> {
-
-    console.log(this.auth.isUserExists('saransh98@gmail.com'));
-
-    const promise = new Promise<any>(
-      (resolve, reject) => {
-        setTimeout(() => {
-          if (control.value === 'Example') {
-            resolve({ 'invalid': true });
-          }
-          else {
-            resolve(null);
-          }
-        }, 1500);
-      }
+  asyncValidator(control: FormControl): Observable<any>{
+    return SignupComponent.Async.isUserExists(control.value).map(data=>{
+      return true;
+    }
     );
-    return promise;
-  }
+   }
 
-
+  
 }

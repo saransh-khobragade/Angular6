@@ -55,7 +55,8 @@ export class SignupComponent{
 
   asyncValidator(control: FormControl){
     return this.auth.isUserExists(control.value).subscribe(data=>{
-      return data ? null : { emailTaken: true };
+      if(!data.success) {control.setErrors(null);}
+      return data.success ? null : { emailTaken: true };
     }
     );
    }

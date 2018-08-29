@@ -44,8 +44,8 @@ export class AuthService {
     return this.http.post<register>('/api/login', { email: username, password });
   }
 
-  isUserExists(id:string){
-    return this.http.post('/api/isUserExist',{email:id});
+  isUserExists(id:string):Observable<register>{
+    return this.http.post<register>('/api/isUserExist',{email:id});
   }
 
   isUserLoggedIn(): Observable<isLoggedIn> {

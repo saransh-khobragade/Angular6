@@ -77,8 +77,9 @@ app.get('/api/profile',async (req,res)=>{
     })
 })
 
-app.get('/api/isUserExist/:email', async (req, res) =>{		//register API(create user)
-	User.findOne({email:req.params.email},(function (err, result) {
+app.post('/api/isUserExist', async (req, res) =>{		//register API(create user)
+	const{email}=req.body
+	User.findOne({email},(function (err, result) {
 		if (err) {
 			return res.json({success:false, message: 'omething wemt wrong'})
 		} else if(result){

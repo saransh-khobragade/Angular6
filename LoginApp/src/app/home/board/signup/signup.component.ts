@@ -55,7 +55,11 @@ export class SignupComponent{
 
   asyncValidator(control: FormControl){
     return this.auth.isUserExists(control.value).subscribe(data=>{
-      if(!data.success) {control.setErrors(null);}
+      if(!data.success) {var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+      if (reg.test(control.value) == true) 
+      {
+        control.setErrors(null)}
+      }
       return data.success ? null : { emailTaken: true };
     }
     );

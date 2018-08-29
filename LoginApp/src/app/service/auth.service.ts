@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
+import { HttpClient,HttpParams } from '@angular/common/http'
 import { Observable } from '../../../node_modules/rxjs';
 import { promise } from '../../../node_modules/protractor';
 import {map} from 'rxjs/operators';
@@ -21,6 +21,15 @@ interface isLoggedIn {
 
 interface userCheck {
   status: boolean
+}
+
+interface user {
+  fname: string,
+  lname: string,
+  email:string,
+  phone:Number
+  gender:string,
+  dob:string
 }
 
 @Injectable({
@@ -58,5 +67,15 @@ export class AuthService {
 
   registerUser(username, email, password, phone, gender, dob) {
     return this.http.post<register>('/api/user', { name: username, email, password, phone, gender, dob }, { observe: 'response' });
+  }
+
+  getUser(username){
+    const options = username ?
+    { params: new HttpParams().set('email', username) } : {};
+    return this.http.get<user>('/api/user/:email',options);
+  }
+
+  logout():Observable<isLoggedIn>{
+    return this.http.get<isLoggedIn>('/api/logout')
   }
 }

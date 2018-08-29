@@ -20,13 +20,17 @@ export class ProfileComponent implements OnInit {
     this.Auth.getUserProfile().subscribe(data=>{
       if(data.success){
         this.Auth.setLoggedIn(true);
-        this.user = data.email
+        this.Auth.getUser(data.email).subscribe(data=>console.log(data));
       }
       else
       {
         alert(data.message);
       }
     });
+  }
+
+  logout(){
+    this.Auth.logout();
   }
 
 }

@@ -117,6 +117,7 @@ app.get('/api/getAllUsers', async (req, res)=>{			// get all users
 
 app.get('/api/user/:email', async (req, res)=>{			// get user with id
 	User.findOne({email:req.params.email}, function (err, user) {
+		console.log(req.params.email)
 		if(err) {
 			return res.json({success:false, message: 'Something went wrong'})
 		}
@@ -175,6 +176,13 @@ app.post('/api/profile/image/:email', upload.single('profilePicture'), async (re
 			return res.json({success:false, message:'Something went wrong'})
 		return res.json({success:true, message: 'Profile picture saved successfully'})
 		})
+	})
+})
+
+app.get('/api/logout',(req,res)=>{
+	req.session.destroy()
+	res.json({
+		success:true
 	})
 })
 

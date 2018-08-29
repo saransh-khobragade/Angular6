@@ -24,11 +24,11 @@ export class SignupComponent{
     'username': new FormControl('Saransh ',Validators.required),
     'password': new FormControl('Password',Validators.required),
     'confirmPassword': new FormControl('Password',Validators.required),
-    'email': new FormControl('saransh98@gmail.com',[Validators.required,this.asyncValidator]),
+    'email': new FormControl('saransh98@gmail.com',[Validators.required,this.asyncValidator.bind(this)]),
     'number': new FormControl('9893203938',Validators.required),
     'birthday': new FormControl('2018-08-01',Validators.required),
     'gender': new FormControl('male',Validators.required),
-    },{ validators:this.confirmPassValidator }
+    }
     );
   }
 
@@ -53,9 +53,9 @@ export class SignupComponent{
     else return null ;
   }
 
-  asyncValidator(control: FormControl): Observable<any>{
-    return SignupComponent.Async.isUserExists(control.value).map(data=>{
-      return true;
+  asyncValidator(control: FormControl){
+    return this.auth.isUserExists(control.value).subscribe(data=>{
+      return data ? null : { emailTaken: true };
     }
     );
    }

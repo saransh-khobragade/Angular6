@@ -28,7 +28,7 @@ export class SignupComponent{
     'number': new FormControl('9893203938',Validators.required),
     'birthday': new FormControl('2018-08-01',Validators.required),
     'gender': new FormControl('male',Validators.required),
-    }
+    },{validators:this.confirmPassValidator}
     );
   }
 

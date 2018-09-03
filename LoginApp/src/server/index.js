@@ -77,11 +77,10 @@ app.get('/api/profile',async (req,res)=>{
     })
 })
 
-app.post('/api/isUserExist', async (req, res) =>{		//register API(create user)
-	const{email}=req.body
-	User.findOne({email},(function (err, result) {
+app.get('/api/isUserExist', async (req, res) =>{		//register API(create user)
+	User.findOne({email:req.query.email},(function (err, result) {
 		if (err) {
-			return res.json({success:false, message: 'omething wemt wrong'})
+			return res.json({success:false, message: 'Something wemt wrong'})
 		} else if(result){
 			return res.json({success:true, message: 'User already exists'})
 		}
@@ -115,9 +114,8 @@ app.get('/api/getAllUsers', async (req, res)=>{			// get all users
 	}).select('fname lname email phone gender dob')
 })
 
-app.get('/api/user/:email', async (req, res)=>{			// get user with id
-	User.findOne({email:req.params.email}, function (err, user) {
-		console.log(req.params.email)
+app.get('/api/user', async (req, res)=>{			// get user with id
+	User.findOne({email:req.query.email}, function (err, user) {
 		if(err) {
 			return res.json({success:false, message: 'Something went wrong'})
 		}
@@ -128,8 +126,8 @@ app.get('/api/user/:email', async (req, res)=>{			// get user with id
 	}).select('fname lname email phone gender dob')
 })
 
-app.put('/api/user/:email', async (req, res)=>{			// update user details
-	User.findOne({email:req.params.email}, function(err, user) {
+app.put('/api/user', async (req, res)=>{			// update user details
+	User.findOne({email:req.query.email}, function(err, user) {
 		if(err){
 			return res.json({success:false, message:'Something went wrong'})
 		}
@@ -151,8 +149,8 @@ app.put('/api/user/:email', async (req, res)=>{			// update user details
 	})
 })
 
-app.delete('/api/user/:email',async (req,res)=>{		//delete user
-    User.deleteOne({ email:req.params.email }, function (err) {  
+app.delete('/api/user',async (req,res)=>{		//delete user
+    User.deleteOne({ email:req.query.email }, function (err) {  
         if (err) {  
             return res.json({success:false, message:'Something went wrong'})  
         }  
@@ -160,8 +158,7 @@ app.delete('/api/user/:email',async (req,res)=>{		//delete user
     })  
 })
 
-app.post('/api/profile/image/:email', upload.single('profilePicture'), async (req, res)=> {
-	console.log(req.file)
+app.post('/api/profile/image', upload.single('profilePicture'), async (req, res)=> {
 	const email = req.session.email
 	User.findOne({email}, function(err, user) {		
 		if(err){

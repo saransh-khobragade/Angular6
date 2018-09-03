@@ -176,7 +176,8 @@ app.post('/api/profile/image', upload.single('profilePicture'), async (req, res)
 	})
 })
 
-app.get('/api/logout',(req,res)=>{
+app.post('/api/logout',(req,res)=>{
+	console.log('jj')
 	req.session.destroy()
 	res.json({
 		success:true

@@ -1,7 +1,8 @@
 
   <div [hidden]="usercreated">
       <form #id [formGroup]="myForm" (ngSubmit)="onSubmit()">
-          Username<input type="text" formControlName="username" minlength="8"><br>
+          First Name<input type="text" formControlName="firstname" minlength="8"><br>
+          Last Name<input type="text" formControlName="lastname" minlength="8"><br>
           Password<input type="text" formControlName="password" minlength="8" #pass><br>
           Confirm Password<input type="text" formControlName="confirmPassword" minlength="8"><br>
           Email<input type="email" formControlName="email"><br>

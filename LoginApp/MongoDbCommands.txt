@@ -1,0 +1,3 @@
+use Angular6
+db.users.find()
+db.users.deleteMany({})

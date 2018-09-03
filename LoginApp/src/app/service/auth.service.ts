@@ -54,7 +54,9 @@ export class AuthService {
   }
 
   isUserExists(id:string):Observable<register>{
-    return this.http.post<register>('/api/isUserExist',{email:id});
+    const options = id ?
+    { params: new HttpParams().set('email', id) } : {};
+    return this.http.get<register>('/api/isUserExist',options);
   }
 
   isUserLoggedIn(): Observable<isLoggedIn> {
@@ -65,17 +67,17 @@ export class AuthService {
     return this.http.get<profile>('/api/profile')
   }
 
-  registerUser(username, email, password, phone, gender, dob) {
-    return this.http.post<register>('/api/user', { name: username, email, password, phone, gender, dob }, { observe: 'response' });
+  signUpUser(fname,lname, email, password, phone, gender, dob) {
+    return this.http.post<user>('/api/user', {fname,lname, email, password, phone, gender, dob }, { observe: 'response' });
   }
 
   getUser(username){
     const options = username ?
     { params: new HttpParams().set('email', username) } : {};
-    return this.http.get<user>('/api/user/:email',options);
+    return this.http.get<user>('/api/user/',options);
   }
 
-  logout():Observable<isLoggedIn>{
-    return this.http.get<isLoggedIn>('/api/logout')
+  logout(username){
+    return this.http.post('/api/logout',{email:username});
   }
 }

@@ -12,8 +12,8 @@ export class LoginComponent implements OnInit {
 
   
 
-  username="saransh@gmail.com";
-  password="12345";
+  username="saransh98@gmail.com";
+  password="Password";
 
   constructor(private Auth:AuthService,private router:Router) { 
     

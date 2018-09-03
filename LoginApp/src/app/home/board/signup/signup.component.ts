@@ -21,7 +21,8 @@ export class SignupComponent{
 
     this.myForm = new FormGroup(
     {
-    'username': new FormControl('Saransh ',Validators.required),
+    'firstname': new FormControl('Saransh ',Validators.required),
+    'lastname': new FormControl('Saransh ',Validators.required),
     'password': new FormControl('Password',Validators.required),
     'confirmPassword': new FormControl('Password',Validators.required),
     'email': new FormControl('saransh98@gmail.com',[Validators.required,this.asyncValidator.bind(this)]),
@@ -33,7 +34,7 @@ export class SignupComponent{
   }
 
   onSubmit() {
-    this.auth.registerUser(this.myForm.value.username, this.myForm.value.email, this.myForm.value.password, this.myForm.value.phone, this.myForm.value.gender, this.myForm.value.birthday)
+    this.auth.signUpUser(this.myForm.value.firstname,this.myForm.value.lastname, this.myForm.value.email, this.myForm.value.password, this.myForm.value.number, this.myForm.value.gender, this.myForm.value.birthday)
       .subscribe(res => {
         if (res.status == 200)
           this.usercreated = true;

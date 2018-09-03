@@ -93,13 +93,13 @@ app.post('/api/user', async (req, res) =>{		//register API(create user)
 	const{fname, lname, email, password, phone, gender, dob} = req.body
 	const result = await User.findOne({email})
     if(result){
-        return res.json({success:false, message: 'User already exists'})
+        return res.status(400).json({success:false, message: 'User already exists'})
     }
 
 	const user = new User({fname, lname, email, password, phone, gender, dob})
 	user.save(function (err) {  
         if (err) {  
-            return res.json({success:false, message:'Something went wrong'})  
+            return res.status(500).json({success:false, message:'Something went wrong'})  
         }  
         return res.json({success:true, message:'Registration successful'})  
     })

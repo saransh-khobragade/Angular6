@@ -63,7 +63,7 @@ export class SignupComponent{
             control.setErrors(null)
           }
       }
-      return res.body.success? null : { emailTaken: true };
+      return res.body.success? { emailTaken: true }:null;
     }
     );
    }

@@ -46,7 +46,7 @@ const ProfilePicture = require('./model/profilepicture')
 app.use(bodyparser.json())
 
 
-//--------------------------------------------Api------------------------------------------------------------//
+//--------------------------------------------Api------------------------------------------------------//
 
 
 app.post('/api/login',async (req,res)=>{		//login API
@@ -176,7 +176,7 @@ app.post('/api/profile/image', upload.single('profilePicture'), async (req, res)
 })
 
 app.post('/api/logout',(req,res)=>{
-	console.log('jj')
+	const{email}=req.body
 	req.session.destroy()
 	res.json({
 		success:true

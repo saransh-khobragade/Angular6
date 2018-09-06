@@ -78,11 +78,12 @@ app.get('/api/profile',async (req,res)=>{
 app.get('/api/isUserExist', async (req, res) =>{		//register API(create user)
 	User.findOne({email:req.query.email},(function (err, result) {
 		if (err) {
-			return res.status(500).json({message: 'Something wemt wrong'})
-		} else if(result){
-			return res.json({message: 'User already exists'})
+			return res.status(500).json({message: 'Something went wrong'})
+		} 
+		else if(result){
+			return res.json({success:true,message: 'User exists'})
 		}
-		return res.status(400).json({message: 'User doesn\'t exists'})
+		return res.json({success:false,message: 'User doesn\'t exists'})
 	}))
     
 })

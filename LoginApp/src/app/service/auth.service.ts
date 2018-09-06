@@ -39,14 +39,14 @@ export class AuthService {
     return this.LoggedInUser;
   }
 
-  isUser(username, password) {
+  isUser(username, password){
     return this.http.post<isUser>('/api/login', { email: username, password }, { observe: 'response' });
   }
 
   isUserExists(id:string){
     const params = new HttpParams();
     params.set('email', id);
-    return this.http.get<register>('/api/isUserExist',{ observe: 'response'  });
+    return this.http.get<register>('/api/isUserExist',{ observe: 'response', params:{email:id}  });
   }
 
   isUserLoggedIn(): Observable<isLoggedIn> {
@@ -58,7 +58,6 @@ export class AuthService {
   }
 
   logout(username){
-    console.log('hi')
     return this.http.post('/api/logout',{email:username});
   }
 }

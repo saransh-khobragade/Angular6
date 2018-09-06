@@ -78,12 +78,11 @@ app.get('/api/profile',async (req,res)=>{
 app.get('/api/isUserExist', async (req, res) =>{		//register API(create user)
 	User.findOne({email:req.query.email},(function (err, result) {
 		if (err) {
-			return res.status(500).json({success:false,message: 'Something went wrong'})
-		} 
-		else if(result){
-			return res.json({success:true,message: 'User already exists'})
+			return res.status(500).json({message: 'Something wemt wrong'})
+		} else if(result){
+			return res.json({message: 'User already exists'})
 		}
-		return res.json({success:false,message: 'User doesn\'t exists'})
+		return res.status(400).json({message: 'User doesn\'t exists'})
 	}))
     
 })
@@ -176,8 +175,8 @@ app.post('/api/profile/image', upload.single('profilePicture'), async (req, res)
 })
 
 app.post('/api/logout',(req,res)=>{
-	console.log(req.session)
-	//req.session.destroy()
+	console.log('jj')
+	req.session.destroy()
 	res.json({
 		success:true
 	})

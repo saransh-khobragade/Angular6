@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,Output,EventEmitter} from '@angular/core';
 import { AuthService } from '../../../service/auth.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-login',
@@ -9,8 +9,6 @@ import { Observable } from 'rxjs';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
-  
 
   username="saransh98@gmail.com";
   password="Password";
@@ -29,14 +27,14 @@ export class LoginComponent implements OnInit {
     //const username = target.querySelector('#username').value;
     //const password = target.querySelector('#password').value;
 
-    this.Auth.isUser(this.username,this.password).subscribe(data=>{
-      if(data.success){
-        this.Auth.setLoggedIn(true);
+    this.Auth.isUser(this.username,this.password).subscribe(res=>{
+      if(res.status==200){
+        this.Auth.setLoggedInUser(this.username);
         this.router.navigate(['profile']);
       }
       else
       {
-        alert(data.message);
+        alert("Please enter correct details");
       }
     });
 

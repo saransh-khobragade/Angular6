@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../../service/auth.service';
-import {map} from 'rxjs/operators';
+import { UserService } from '../../../service/user.service';
+
 
 @Component({
   selector: 'app-signup',
@@ -16,8 +17,7 @@ export class SignupComponent{
   usercreated: boolean = false;
   static Async:AuthService
   
-  constructor(private auth: AuthService) {
-    SignupComponent.Async=auth
+  constructor(private user:UserService,private auth:AuthService) {
 
     this.myForm = new FormGroup(
     {
@@ -34,7 +34,7 @@ export class SignupComponent{
   }
 
   onSubmit() {
-    this.auth.signUpUser(this.myForm.value.firstname,this.myForm.value.lastname, this.myForm.value.email, this.myForm.value.password, this.myForm.value.number, this.myForm.value.gender, this.myForm.value.birthday)
+    this.user.signUpUser(this.myForm.value.firstname,this.myForm.value.lastname, this.myForm.value.email, this.myForm.value.password, this.myForm.value.number, this.myForm.value.gender, this.myForm.value.birthday)
       .subscribe(res => {
         if (res.status == 200)
           this.usercreated = true;
@@ -55,13 +55,15 @@ export class SignupComponent{
   }
 
   asyncValidator(control: FormControl){
-    return this.auth.isUserExists(control.value).subscribe(data=>{
-      if(!data.success) {var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-      if (reg.test(control.value) == true) 
-      {
-        control.setErrors(null)}
+    return this.auth.isUserExists(control.value).subscribe(res=>{
+      if(res.status!=200||!res.body.success) {
+          var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+          if (reg.test(control.value) == true) 
+          {
+            control.setErrors(null)
+          }
       }
-      return data.success ? null : { emailTaken: true };
+      return res.body.success ?null:{ emailTaken: true };
     }
     );
    }

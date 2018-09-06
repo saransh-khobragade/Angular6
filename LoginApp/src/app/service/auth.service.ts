@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpParams } from '@angular/common/http'
 import { Observable } from '../../../node_modules/rxjs';
-import { promise } from '../../../node_modules/protractor';
-import {map} from 'rxjs/operators';
 
 interface register {
   success: boolean,
@@ -19,44 +17,36 @@ interface isLoggedIn {
   status: boolean
 }
 
-interface userCheck {
-  status: boolean
+interface isUser {
+  status: number
 }
 
-interface user {
-  fname: string,
-  lname: string,
-  email:string,
-  phone:Number
-  gender:string,
-  dob:string
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private LoggedInStatus: boolean;
+  private LoggedInUser: string;
 
   constructor(private http: HttpClient) { }
 
-  setLoggedIn(value: boolean) {
-    this.LoggedInStatus = value;
+  setLoggedInUser(value: string) {
+    this.LoggedInUser = value;
   }
 
-  get isLoggedIn(): boolean {
-    return this.LoggedInStatus;
+  get getloggedInUser(): string {
+    return this.LoggedInUser;
   }
 
   isUser(username, password) {
-    return this.http.post<register>('/api/login', { email: username, password });
+    return this.http.post<isUser>('/api/login', { email: username, password }, { observe: 'response' });
   }
 
-  isUserExists(id:string):Observable<register>{
-    const options = id ?
-    { params: new HttpParams().set('email', id) } : {};
-    return this.http.get<register>('/api/isUserExist',options);
+  isUserExists(id:string){
+    const params = new HttpParams();
+    params.set('email', id);
+    return this.http.get<register>('/api/isUserExist',{ observe: 'response'  });
   }
 
   isUserLoggedIn(): Observable<isLoggedIn> {
@@ -67,17 +57,8 @@ export class AuthService {
     return this.http.get<profile>('/api/profile')
   }
 
-  signUpUser(fname,lname, email, password, phone, gender, dob) {
-    return this.http.post<user>('/api/user', {fname,lname, email, password, phone, gender, dob }, { observe: 'response' });
-  }
-
-  getUser(username){
-    const options = username ?
-    { params: new HttpParams().set('email', username) } : {};
-    return this.http.get<user>('/api/user/',options);
-  }
-
   logout(username){
+    console.log('hi')
     return this.http.post('/api/logout',{email:username});
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../../service/user.service';
 import { AuthService } from '../../../service/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -9,28 +9,30 @@ import { Router } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
 
-  user="User is name is loading"
-
-  constructor(private Auth:AuthService,private router:Router) { }
-
-  ngOnInit() {
-
-    
-
-    this.Auth.getUserProfile().subscribe(data=>{
-      if(data.success){
-        this.Auth.setLoggedIn(true);
-        this.Auth.getUser(data.email).subscribe(data=>console.log(data));
-      }
-      else
-      {
-        alert(data.message);
-      }
-    });
+  userDetails={
+    fname:"",
+    lname:"",
+    email:"",
+    phone:4567,
+    dob:""
   }
+  userAlive:string;
 
+  receiveMessage($event) {
+   
+  }
+  constructor(private user:UserService,private auth:AuthService) { }
+
+  ngOnInit(){
+          this.userAlive=this.auth.getloggedInUser
+          this.user.getUser(this.userAlive).subscribe(data=>{
+          this.userDetails=data;
+        }
+      );
+  }
+      
   logout(){
-    this.Auth.logout();
+    this.auth.logout(this.userAlive).subscribe(data=>console.log(data));
   }
 
 }

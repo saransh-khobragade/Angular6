@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { AuthService } from './service/auth.service';
+import { UserService } from './service/user.service'
 import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from './auth.guard';
 import { ReactiveFormsModule,FormsModule} from '@angular/forms';
@@ -61,7 +62,7 @@ import { StatusComponent } from './home/board/status/status.component';
   
   )
   ],
-  providers: [AuthService,AuthGuard],
+  providers: [AuthService,UserService,AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

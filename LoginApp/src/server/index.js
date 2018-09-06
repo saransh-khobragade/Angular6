@@ -55,24 +55,23 @@ app.post('/api/login',async (req,res)=>{		//login API
     if(!result){
         return res.json({success: false, message:'Email/Password incorrect'})
     }
-	res.json({success: true, message:'Login Success'})
-    req.session.user = email
+	req.session[email] = email
     req.session.save()
+	console.log(req.session)
+	res.json({success: true, message:'Login Success'})
+    
 })
 
 app.get('/api/isUserLoggedIn',(req,res)=>{
-    res.json({
-        status:!!req.session.user
-         //status: req.session.user?true:false
-    })
+	res.json({status: req.session[req.query.email]? true : false })
 })
 
 app.get('/api/profile',async (req,res)=>{
-    const user = await User.findOne({email:req.session.user})
+    const user = await User.findOne({email:req.session[email]})
     if(!user){
         return res.json({success: false, message:'user was deleted'})
     }
-    return res.json({success: true, email:req.session.user})
+    return res.json({success: true, email:req.session[email]})
 })
 
 app.get('/api/isUserExist', async (req, res) =>{		//check for existing user
@@ -157,7 +156,7 @@ app.delete('/api/user',async (req,res)=>{		//delete user
 })
 
 app.post('/api/profile/image', upload.single('profilePicture'), async (req, res)=> {
-	const email = req.session.email
+	const email = req.session[email]
 	User.findOne({email}, function(err, user) {		
 		if(err){
 			return res.json({success: false, message:'Something went wrong'})
@@ -174,12 +173,9 @@ app.post('/api/profile/image', upload.single('profilePicture'), async (req, res)
 	})
 })
 
-app.post('/api/logout',(req,res)=>{
-	const{email}=req.body
-	req.session.destroy()
-	res.json({
-		success:true
-	})
+app.delete('/api/logout',(req,res)=>{
+	delete req.session[req.query.email]
+	res.json({success:true})
 })
 
 app.listen(1234,()=>console.log('server listening at 1234'))

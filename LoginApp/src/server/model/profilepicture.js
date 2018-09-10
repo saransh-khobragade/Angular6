@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('../module/connection')
 
 const ProfilePictureSchema = new mongoose.Schema({
 	email:{type: String, required: true},

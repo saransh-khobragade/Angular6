@@ -1,6 +1,5 @@
-const User = require('../model/users')
-const ProfilePicture = require('../model/profilepicture')
-
+const User = require('../model/Users')
+const ProfilePicture = require('../model/ProfilePicture')
 
 exports.login = async (req,res)=>{		//login API
     const{email,password}=req.body
@@ -54,15 +53,6 @@ exports.createUser = async (req, res) =>{
     })
 };
 
-exports.getAllUsers = async (req, res)=>{		
-	User.find({}, function (err, users) {
-		if(err) {
-			return res.json({success: false, message: 'Something went wrong'})
-		}
-		return res.json(users)		
-	}).select('fname lname email phone gender dob')
-};
-
 exports.getOneUser = async (req, res)=>{			// get user with id
 	User.findOne({email:req.query.email}, function (err, user) {
 		if(err) {
@@ -75,26 +65,12 @@ exports.getOneUser = async (req, res)=>{			// get user with id
 	}).select('fname lname email phone gender dob')
 };
 
-exports.editUser = async (req, res)=>{			// update user details
-	User.findOne({email:req.query.email}, function(err, user) {
-		if(err){
-			return res.json({success: false, message:'Something went wrong'})
-		}
-		else if(!user){
-			return res.json({success: false, message: 'User not found'})
-		}
-		user.fname = req.body.fname
-		user.lname = req.body.lname
-		user.password = req.body.password
-		user.phone = req.body.phone
-		user.gender = req.body.gender
-		user.dob = req.body.dob
-		user.save(function(err){
+exports.editUser = async (req, res)=>{			// update user details	
+	User.updateOne({ email: req.query.email }, req.body, function(err){
 			if(err){
 				return res.json({success: false, message:'Something went wrong'})
 			}
 			return res.json({success: true, message:'User details updated successfully'})
-		})
 	})
 };
 

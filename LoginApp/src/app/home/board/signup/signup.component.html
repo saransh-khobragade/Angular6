@@ -20,7 +20,7 @@
 
 
 <div class="container" [hidden]="usercreated">
-  <form #id [formGroup]="myForm" (ngSubmit)="onSubmit()">
+  <form ngNativeValidate #id [formGroup]="myForm" (ngSubmit)="onSubmit()">
     <div class="form-group row">
       <label for="staticEmail" class="col-sm-6 col-form-label">Fisrt Name</label>
       <div class="col-sm-6">
@@ -38,7 +38,7 @@
     <div class="form-group row">
       <label for="inputPassword" class="col-sm-6 col-form-label">Email</label>
       <div class="col-sm-6">
-        <input type="text" class="form-control" formControlName="email" placeholder="Email">
+        <input type="email" class="form-control" formControlName="email" placeholder="Email">
       </div>
     </div>
 
@@ -61,7 +61,7 @@
     <div class="form-group row">
       <label for="inputPassword" class="col-sm-6 col-form-label">Phone No.</label>
       <div class="col-sm-6">
-        <input type="text" class="form-control" formControlName="number" pattern="(?=.*\d).{10}" placeholder="Phone No.">
+        <input type="number" class="form-control" formControlName="number" pattern="(?=.*\d).{10}" placeholder="Phone No.">
       </div>
     </div>
 
@@ -69,9 +69,24 @@
     <div class="form-group row">
       <label for="inputPassword" class="col-sm-6 col-form-label">Gender</label>
       <div class="col-sm-6 align-item-left">
-        <div>
-          <input type="radio" formControlName="gender" value="Male">Male
-          <input type="radio" formControlName="gender" value="Female">Female
+        <div class="custom-control custom-radio">
+          <div class="row">
+            <div class="col">
+              <input type="radio" class="custom-control-input" id="customControlValidation" formControlName="gender"
+                value="Male">
+              <label class="custom-control-label" for="customControlValidation">Male</label>
+            </div>
+            <div class="col">
+              <input type="radio" class="custom-control-input" id="customControlValidation2" formControlName="gender"
+                value="Female">
+              <label class="custom-control-label" for="customControlValidation2">Female</label>
+            </div>
+            <div class="col">
+              <input type="radio" class="custom-control-input" id="customControlValidation3" formControlName="gender"
+                value="Transgender">
+              <label class="custom-control-label" for="customControlValidation3">Transgender</label>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -88,8 +103,7 @@
 
     <div class="form-group row ">
       <div class="col-sm-12">
-        <button type="submit" class="btn btn-md m-2" [disabled]="!myForm.valid">Sign up</button>
-
+        <input type="submit" class="btn btn-md m-2" value="Sign up">
         <button type="reset" class="btn btn-md m-2">Reset</button>
       </div>
     </div>
@@ -98,3 +112,7 @@
   </form>
 </div>
 <div [hidden]="!usercreated">Your profile has been created</div>
+
+
+
+

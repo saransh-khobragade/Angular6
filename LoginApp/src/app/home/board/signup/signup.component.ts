@@ -21,7 +21,7 @@ export class SignupComponent{
 
     this.myForm = new FormGroup(
     {
-    'firstname': new FormControl('Saransh ',Validators.required),
+    'firstname': new FormControl('',Validators.required),
     'lastname': new FormControl('Saransh ',Validators.required),
     'password': new FormControl('Password',Validators.required),
     'confirmPassword': new FormControl('Password',Validators.required),

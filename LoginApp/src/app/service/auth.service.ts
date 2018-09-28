@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpParams } from '@angular/common/http'
-import { Observable } from '../../../node_modules/rxjs';
+import { HttpClient,HttpParams,HttpErrorResponse } from '@angular/common/http'
+import { Observable,throwError } from '../../../node_modules/rxjs';
+import { retry,catchError } from 'rxjs/operators';
 
 interface register {
   success: boolean,
@@ -18,7 +19,9 @@ interface isLoggedIn {
 }
 
 interface isUser {
-  status: number
+  status: number,
+  success: boolean,
+  message:string
 }
 
 
@@ -40,8 +43,10 @@ export class AuthService {
   }
 
   isUser(username, password){
-    return this.http.post<isUser>('/api/login', { email: username, password }, { observe: 'response' });
-  }
+    return this.http.post<isUser>('/api/login', { email: username, password }, { observe: 'response' }).pipe(
+      retry(0),
+      catchError(this.handleError));
+  }//used
 
   isUserExists(id:string){
     const params = new HttpParams();
@@ -60,4 +65,22 @@ export class AuthService {
   logout(username){
     return this.http.post('/api/logout',{email:username});
   }
+
+
+  handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('Client side error:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      if(error.status==504) alert('Backend is not working')
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    // return an observable with a user-facing error message
+    return throwError(
+      'Something bad happened; please try again later.');
+  };
 }

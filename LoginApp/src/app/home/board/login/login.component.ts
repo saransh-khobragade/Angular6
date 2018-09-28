@@ -28,13 +28,20 @@ export class LoginComponent implements OnInit {
     const password = target.querySelector('#password').value;
 
     this.Auth.isUser(username,password).subscribe(res=>{
+      console.log(res.body)
       if(res.status==200){
-        this.Auth.setLoggedInUser(username);
-        this.router.navigate(['profile']);
+        if(res.body.success){
+          this.Auth.setLoggedInUser(username);
+          this.router.navigate(['profile']);
+        }
+        else{
+          alert(res.body.message)
+        }
+        
       }
       else
       {
-        alert("Please enter correct details");
+        alert("Api call failed");
       }
     });
 

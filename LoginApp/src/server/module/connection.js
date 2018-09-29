@@ -5,7 +5,7 @@ conn.connect('mongodb://localhost:27017/Angular6', { useNewUrlParser: true })
 
 // When successfully connected
 conn.connection.on('connected', function () {  
-  console.log('Mongoose up and default connection open to ' + dbURI);
+  console.log('Mongoose up');
   mongoose = true;
 });
 

@@ -9,7 +9,7 @@ var preInterceptor = interceptor(function(req, res){
 	//if(!connection.mongoose)
 	//	return res.json({success: false, message:'Mongodb is down'})
 })
-app.use(preInterceptor);
+//app.use(preInterceptor);
 app.use(session({
     secret: 'ksjldklahshjsljksjkxshjchosjckspcgusjvghhdafhjsbjknsldjl',
     saveUninitialized:true,

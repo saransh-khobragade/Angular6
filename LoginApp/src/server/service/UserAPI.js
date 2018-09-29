@@ -3,21 +3,26 @@ const ProfilePicture = require('../model/ProfilePicture')
 
 exports.login = async (req,res)=>{		//login API
     const{email,password}=req.body
-	User.findOne({email},(function (err, res) {
+	User.findOne({email},(function (err, result) {
 		if (err) {
 			return res.json({success: false, message: 'Something went wrong'})
 		} 
-		else if(!res)
+		else if(!result)
 			return res.json({success:false,message: 'Email id doesn\'t exists'})
-	}))
-    const result = await User.findOne({email,password})
-    if(!result){
-        return res.json({success: false, message:'Incorrect Password'})
-    }
-	req.session[email] = email
-    req.session.save()
-	console.log(req.session)
-	res.json({success: true, message:'Login Success'})
+		else{
+			User.findOne({email,password}, function(error, output){
+				if (err) {
+					return res.json({success: false, message: 'Something went wrong'})
+				}
+				else if(!output){
+					return res.json({success: false, message:'Incorrect Password'})
+				}
+				req.session[email] = email
+				req.session.save()
+				res.json({success: true, message:'Login Success'})
+			})
+		}
+	}))  
 };
 
 exports.isUserLoggedIn = async (req,res)=>{
@@ -110,5 +115,5 @@ exports.uploadProfilePic = async (req, res)=> {
 
 exports.logout = async (req,res)=>{
 	delete req.session[req.query.email]
-	res.json({success:true})
+	return res.json({success:true})
 };

@@ -5,6 +5,10 @@ const NotificationSchema = new mongoose.Schema({
 	creater:{type: String, required: true},
 	receiver:{type: String, required: true},
    	time:{type : Date, default: Date.now}
+}, function(err){
+	if (err) { 
+       console.log(err); 
+     }
 })
 
 const Notification = mongoose.model('Notification', NotificationSchema)

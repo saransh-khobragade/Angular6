@@ -11,6 +11,10 @@ const UserSchema = new mongoose.Schema({
 	dob:{type: String, required: true},
 	friends:{type: [String], required: false}
 	//notification:{type: [Notification], required: false}
+}, function(err){
+	if (err) { 
+       console.log(err); 
+     }
 })
 
 const User = mongoose.model('User',UserSchema)

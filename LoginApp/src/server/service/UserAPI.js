@@ -3,9 +3,16 @@ const ProfilePicture = require('../model/ProfilePicture')
 
 exports.login = async (req,res)=>{		//login API
     const{email,password}=req.body
+	User.findOne({email},(function (err, res) {
+		if (err) {
+			return res.json({success: false, message: 'Something went wrong'})
+		} 
+		else if(!res)
+			return res.json({success:false,message: 'Email id doesn\'t exists'})
+	}))
     const result = await User.findOne({email,password})
     if(!result){
-        return res.json({success: false, message:'Email/Password incorrect'})
+        return res.json({success: false, message:'Incorrect Password'})
     }
 	req.session[email] = email
     req.session.save()

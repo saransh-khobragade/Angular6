@@ -6,8 +6,8 @@ const connection = require('./Connection')
 const app = express()
 
 var preInterceptor = interceptor(function(req, res){
-	if(!connection.mongoose)
-		return res.json({success: false, message:'Mongodb is down'})
+	//if(!connection.mongoose)
+	//	return res.json({success: false, message:'Mongodb is down'})
 })
 app.use(preInterceptor);
 app.use(session({

@@ -9,6 +9,7 @@ export class HomeComponent implements OnInit {
 
   @Input() userExists:string;
 
+
   constructor() { }
 
   ngOnInit() {

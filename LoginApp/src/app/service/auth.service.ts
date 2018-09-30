@@ -63,7 +63,7 @@ export class AuthService {
   }
 
   logout(username){
-    return this.http.post('/api/logout',{email:username});
+    return this.http.delete('/api/logout',{email:username});
   }
 
 

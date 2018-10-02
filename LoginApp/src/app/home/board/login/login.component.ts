@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
       if(res.status==200){
         if(res.body.success){
           this.Auth.setLoggedInUser(username);
-          this.router.navigate(['profile']);
+          this.router.navigate(['status']);
           this.comm.userAlive(true)
         }
         else{

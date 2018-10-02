@@ -1,5 +1,7 @@
 import { Component, OnInit,Input } from '@angular/core';
 import { InteractionService } from '../../service/interaction.service';
+import { AuthService } from '../../service/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +13,7 @@ export class HeaderComponent implements OnInit {
   @Input() userExists:string;
   userAlive:boolean
 
-  constructor(private comm:InteractionService) {
+  constructor(private auth:AuthService,private comm:InteractionService,private router:Router) {
 
     this.comm.isUserExistsObservable.subscribe( data=>{this.userAlive=data});
   }
@@ -20,6 +22,12 @@ export class HeaderComponent implements OnInit {
     
   }
 
+  logout(){
+    this.auth.logout(this.userAlive).subscribe(data=>{
+      if(data){
+        this.router.navigate(['login']);
+        this.comm.userAlive(false)
+      }
 
 
 }

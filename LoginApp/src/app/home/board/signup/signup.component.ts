@@ -22,13 +22,13 @@ export class SignupComponent{
     this.myForm = new FormGroup(
     {
     'firstname': new FormControl('',Validators.required),
-    'lastname': new FormControl('Saransh ',Validators.required),
-    'password': new FormControl('Password',Validators.required),
-    'confirmPassword': new FormControl('Password',Validators.required),
-    'email': new FormControl('saransh98@gmail.com',[Validators.required,this.asyncValidator.bind(this)]),
-    'number': new FormControl('9893203938',Validators.required),
-    'birthday': new FormControl('2018-08-01',Validators.required),
-    'gender': new FormControl('male',Validators.required),
+    'lastname': new FormControl('',Validators.required),
+    'password': new FormControl('',Validators.required),
+    'confirmPassword': new FormControl('',Validators.required),
+    'email': new FormControl('',[Validators.required,this.asyncValidator.bind(this)]),
+    'number': new FormControl('',Validators.required),
+    'birthday': new FormControl('',Validators.required),
+    'gender': new FormControl('Male',Validators.required),
     },{validators:this.confirmPassValidator}
     );
   }

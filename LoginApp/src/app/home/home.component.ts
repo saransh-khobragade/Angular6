@@ -9,6 +9,11 @@ export class HomeComponent implements OnInit {
 
   @Input() userExists:string;
 
+  public clickedEvent: Event;
+
+  childEventClicked(event: Event) {
+    this.clickedEvent = event;
+  }
 
   constructor() { }
 

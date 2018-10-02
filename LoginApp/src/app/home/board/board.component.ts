@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BoardComponent implements OnInit {
 
+  xyz:boolean
+  
   constructor() { }
 
   ngOnInit() {

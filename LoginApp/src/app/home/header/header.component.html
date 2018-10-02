@@ -10,15 +10,15 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
 
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="userAlive">
                 <a class="nav-link" href="#">Friends<span> </span><span class="badge badge-secondary badge-pill">2</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="userAlive">
                 <a class="nav-link" href="#">Message<span> </span><span class="badge badge-secondary badge-pill">5</span></a>
             </li>
 
         </ul>
-        <form class="form-inline my-2 my-lg-0">
+        <form class="form-inline my-2 my-lg-0" *ngIf="userAlive">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"

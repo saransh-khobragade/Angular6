@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input } from '@angular/core';
+import { InteractionService } from '../../service/interaction.service';
 
 @Component({
   selector: 'app-header',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  @Input() userExists:string;
+  userAlive:boolean
+
+  constructor(private comm:InteractionService) {
+
+    this.comm.isUserExistsObservable.subscribe( data=>{this.userAlive=data});
+  }
 
   ngOnInit() {
+    
   }
+
+
 
 }

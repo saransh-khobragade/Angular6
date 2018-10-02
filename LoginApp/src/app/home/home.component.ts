@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { InteractionService } from '../service/interaction.service';
 
 @Component({
   selector: 'app-home',
@@ -8,11 +9,24 @@ import { Component, OnInit, Input } from '@angular/core';
 export class HomeComponent implements OnInit {
 
   @Input() userExists:string;
+  userAlive:boolean
 
-  constructor() { }
+  constructor(private comm:InteractionService) {
+    
+    this.userExists="hidden"
+
+    this.comm.isUserExistsObservable.subscribe( data=>{
+
+      if(data)
+      {
+        this.userExists="visible"
+      }
+ 
+   });
+  }
 
   ngOnInit() {
-    this.userExists="hidden"
+    
   }
 
 }

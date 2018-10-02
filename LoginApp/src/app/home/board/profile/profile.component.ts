@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../service/user.service';
 import { AuthService } from '../../../service/auth.service';
+import { Router } from '@angular/router';
+import { InteractionService } from '../../../service/interaction.service';
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +23,7 @@ export class ProfileComponent implements OnInit {
   receiveMessage($event) {
    
   }
-  constructor(private user:UserService,private auth:AuthService) { }
+  constructor(private user:UserService,private auth:AuthService,private Auth:AuthService,private router:Router,private comm:InteractionService) { }
 
   ngOnInit(){
           this.userAlive=this.auth.getloggedInUser
@@ -32,7 +34,12 @@ export class ProfileComponent implements OnInit {
   }
       
   logout(){
-    this.auth.logout(this.userAlive).subscribe(data=>console.log(data));
+    this.auth.logout(this.userAlive).subscribe(data=>{
+      if(data){
+        this.router.navigate(['login']);
+        this.comm.userAlive(false)
+      }
+    
   }
 
 }

@@ -21,7 +21,11 @@ export class HomeComponent implements OnInit {
       {
         this.userExists="visible"
       }
- 
+      else
+      {
+        this.userExists="hidden"
+
+      } 
    });
   }
 

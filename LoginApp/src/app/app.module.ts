@@ -51,7 +51,7 @@ import { StatusComponent } from './home/board/status/status.component';
         component:SignupComponent
       },
       {
-        path: 'status',
+        path: 'home',
         component:StatusComponent
       },
       {

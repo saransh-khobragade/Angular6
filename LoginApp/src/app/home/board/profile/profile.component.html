@@ -1,6 +1,43 @@
-First Name :{{userDetails.fname}}<br>
-Last Name :{{userDetails.lname}}<br>
-Email :{{userDetails.email}}<br>
-Number :{{userDetails.phone}}<br>
-Date of Birth : {{userDetails.dob}}<br>
-<button (click)="logout()">Logout</button>
+
+<div class="container">
+    <form>
+
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-6 col-form-label">Fisrt Name</label>
+            <div class="col-sm-6">
+                <label for="staticEmail" class="col-sm-6 col-form-label">{{userDetails.fname}}</label>
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-6 col-form-label">Last Name</label>
+            <div class="col-sm-6">
+                <label for="staticEmail" class="col-sm-6 col-form-label">{{userDetails.lname}}</label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-6 col-form-label">Email</label>
+            <div class="col-sm-6">
+                <label for="staticEmail" class="col-sm-6 col-form-label">{{userDetails.email}}</label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-6 col-form-label">Phone No</label>
+            <div class="col-sm-6">
+                <label for="staticEmail" class="col-sm-6 col-form-label">{{userDetails.phone}}</label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-6 col-form-label">Date of Birth</label>
+            <div class="col-sm-6">
+                <label for="staticEmail" class="col-sm-6 col-form-label">{{userDetails.dob}}</label>
+            </div>
+        </div>
+
+
+    </form>
+</div>

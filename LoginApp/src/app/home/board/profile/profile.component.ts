@@ -1,45 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { UserService } from '../../../service/user.service';
 import { AuthService } from '../../../service/auth.service';
-import { Router } from '@angular/router';
-import { InteractionService } from '../../../service/interaction.service';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnChanges {
 
-  userDetails={
-    fname:"",
-    lname:"",
-    email:"",
-    phone:4567,
-    dob:""
-  }
-  userAlive:string;
+  userDetails = {}
 
-  receiveMessage($event) {
-   
-  }
-  constructor(private user:UserService,private auth:AuthService,private Auth:AuthService,private router:Router,private comm:InteractionService) { }
+  userAlive: string;
 
-  ngOnInit(){
-          this.userAlive=this.auth.getloggedInUser
-          this.user.getUser(this.userAlive).subscribe(data=>{
-          this.userDetails=data;
-        }
-      );
-  }
-      
-  logout(){
-    this.auth.logout(this.userAlive).subscribe(data=>{
-      if(data){
-        this.router.navigate(['login']);
-        this.comm.userAlive(false)
-      }
-    
+  constructor(private user: UserService, private auth: AuthService) { }
+
+  ngOnChanges() {
+    this.auth.isUserExistsObservable.subscribe(data => {
+      this.user.getUser(data).subscribe(data2 => {
+        console.log(data2)
+        this.userDetails = data2;
+      })
+    })
   }
 
 }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../service/user.service';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-detail',
@@ -6,10 +8,27 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./detail.component.css']
 })
 export class DetailComponent implements OnInit {
+ 
+  userDetails={
+    fname:"User",
+    lname:"",
+    email:"",
+    phone:4567,
+    dob:""
+  }
+  userAlive:string;
+  
+  constructor(private user:UserService,private auth:AuthService) { }
 
-  constructor() { }
-
-  ngOnInit() {
+  ngOnInit() { 
+    
+      this.auth.isUserExistsObservable.subscribe(data=>
+        {
+          this.user.getUser(data).subscribe(data2=>{
+            this.userDetails=data2;
+          })
+      
+    })
   }
 
 }

@@ -77,12 +77,26 @@ exports.getOneUser = async (req, res)=>{			// get user with id
 	}).select('fname lname email phone gender dob')
 };
 
-exports.editUser = async (req, res)=>{			// update user details	
-	User.updateOne({ email: req.query.email }, req.body, function(err){
+exports.editUser = async (req, res)=>{			// update user details
+	User.findOne({email:req.body.email}, function(err, user) {
+		if(err){
+			return res.json({success: false, message:'Something went wrong'})
+		}
+		else if(!user){
+			return res.json({success: false, message: 'User not found'})
+		}
+		user.fname = req.body.fname
+		user.lname = req.body.lname
+		user.password = req.body.password
+		user.phone = req.body.phone
+		user.gender = req.body.gender
+		user.dob = req.body.dob
+		user.save(function(err){
 			if(err){
 				return res.json({success: false, message:'Something went wrong'})
 			}
 			return res.json({success: true, message:'User details updated successfully'})
+		})
 	})
 };
 

@@ -17,3 +17,12 @@ exports.getAllUsers = async (req, res)=>{
 		return res.json(users)		
 	}).select('fname lname email phone gender dob friends')
 };
+
+exports.getDatabase = async (req, res)=>{		
+	User.find({}, function (err, users) {
+		if(err) {
+			return res.json({success: false, message: 'Something went wrong'})
+		}
+		return res.json(users)		
+	}).select('fname lname email password phone gender dob friends')
+};

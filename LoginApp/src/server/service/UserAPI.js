@@ -77,21 +77,14 @@ exports.getOneUser = async (req, res)=>{			// get user with id
 	}).select('fname lname email phone gender dob')
 };
 
-exports.editUser = async (req, res)=>{			// update user details
-	User.findOne({email:req.body.email}, function(err, user) {
+exports.editUser = async (req, res)=>{			// update user details	
+	const email = req.query.email
+	User.findOne({email}, function(err, user) {		
 		if(err){
 			return res.json({success: false, message:'Something went wrong'})
-		}
-		else if(!user){
-			return res.json({success: false, message: 'User not found'})
-		}
-		user.fname = req.body.fname
-		user.lname = req.body.lname
-		user.password = req.body.password
-		user.phone = req.body.phone
-		user.gender = req.body.gender
-		user.dob = req.body.dob
-		user.save(function(err){
+		} else if(!user)
+			return res.json({success: false, message:'User doesn\'t exist'})
+		User.updateOne({ email }, {$set: req.body}, function(err){
 			if(err){
 				return res.json({success: false, message:'Something went wrong'})
 			}

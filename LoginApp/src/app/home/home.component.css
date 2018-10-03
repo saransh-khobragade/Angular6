@@ -3,3 +3,13 @@ footer {
     color: white;
     padding: 15px;
   }
+
+
+
+
+@media screen and (max-width: 480px) {
+  .small{
+    background-color: blue;  
+    display: none;
+  }
+}

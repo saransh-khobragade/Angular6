@@ -10,8 +10,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  //username="saransh98@gmail.com";
-  //password="Password";
+  @Output() userExists=new EventEmitter<Event>();
 
   constructor(private Auth:AuthService,private router:Router) { 
     
@@ -33,6 +32,8 @@ export class LoginComponent implements OnInit {
         if(res.body.success){
           this.Auth.setLoggedInUser(username);
           this.router.navigate(['profile']);
+          event="hey"
+          this.userExists.emit(event);
         }
         else{
           alert(res.body.message)

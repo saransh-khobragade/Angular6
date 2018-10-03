@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
     const username = target.querySelector('#username').value;
     const password = target.querySelector('#password').value;
 
+
     this.Auth.isUser(username,password).subscribe(res=>{
       console.log(res.body)
       if(res.status==200){

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,HttpParams,HttpErrorResponse } from '@angular/common/http'
 import { Observable,throwError } from '../../../node_modules/rxjs';
 import { retry,catchError } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 
 interface register {
   success: boolean,
@@ -31,13 +31,14 @@ interface isUser {
 })
 export class AuthService {
 
-  private user = new Subject<string>();
+  private user = new ReplaySubject<string>();
   isUserExistsObservable = this.user.asObservable();
 
   constructor(private http: HttpClient) { }
 
   userAlive(value:string){
     this.user.next(value)
+    this.user.complete()
   }
 
   isUser(username, password){

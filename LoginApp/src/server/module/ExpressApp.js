@@ -1,16 +1,21 @@
 const express = require('express')
 const bodyparser = require('body-parser')
 const session = require('express-session')
-var interceptor = require('express-interceptor')
+const interceptor = require('express-interceptor')
 const connection = require('./Connection')
 const router = require('./Router')
 const app = express()
 
 var preInterceptor = interceptor(function(req, res){
-	//if(!connection.mongoose)
-	//	return res.json({success: false, message:'Mongodb is down'})
+	return {
+		isInterceptable: function(){
+		console.log(connection.mongoose)
+			if(false)
+				return res.json({success: false, message:'Mongodb is down'})
+		}
+	}
 })
-//app.use(preInterceptor);
+app.use(preInterceptor);
 
 app.use(session({
     secret: 'ksjldklahshjsljksjkxshjchosjckspcgusjvghhdafhjsbjknsldjl',

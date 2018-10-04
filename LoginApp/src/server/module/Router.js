@@ -20,6 +20,7 @@ router.get('/api/isUserExist', userAPI.isUserExist) // check for existing user
 
 router.get('/api/allUsers', adminAPI.getAllUsers) // get all users
 router.delete('/api/allUsers', adminAPI.deleteAllUser) //delete all users
+router.get('/api/database', adminAPI.getDatabase)		//get db
 
 router.post('/api/profile/image', upload.single('profilePicture'), userAPI.uploadProfilePic) //upload user profile picture
 

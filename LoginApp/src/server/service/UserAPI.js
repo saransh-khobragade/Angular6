@@ -78,11 +78,18 @@ exports.getOneUser = async (req, res)=>{			// get user with id
 };
 
 exports.editUser = async (req, res)=>{			// update user details	
-	User.updateOne({ email: req.query.email }, req.body, function(err){
+	const email = req.query.email
+	User.findOne({email}, function(err, user) {		
+		if(err){
+			return res.json({success: false, message:'Something went wrong'})
+		} else if(!user)
+			return res.json({success: false, message:'User doesn\'t exist'})
+		User.updateOne({ email }, {$set: req.body}, function(err){
 			if(err){
 				return res.json({success: false, message:'Something went wrong'})
 			}
 			return res.json({success: true, message:'User details updated successfully'})
+		})
 	})
 };
 

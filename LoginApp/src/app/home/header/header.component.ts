@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { InteractionService } from '../../service/interaction.service';
 import { AuthService } from '../../service/auth.service';
 import { Router } from '@angular/router';
 import { UserService } from '../../service/user.service';

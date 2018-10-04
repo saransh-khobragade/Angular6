@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { InteractionService } from '../service/interaction.service';
 import { AuthService } from '../service/auth.service';
 
 @Component({

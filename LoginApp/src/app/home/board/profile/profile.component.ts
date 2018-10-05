@@ -21,27 +21,27 @@ export class ProfileComponent implements OnInit {
   }
   isSave=false
   userAlive: string;
-  myForm: FormGroup;
+  myForm2: FormGroup;
 
   constructor(private user: UserService, private auth: AuthService,private router:Router) {
 
-    this.myForm = new FormGroup(
+    this.myForm2 = new FormGroup(
       {
-      'firstname': new FormControl(this.userDetails.fname,Validators.required),
+      'firstname': new FormControl('',Validators.required),
       'lastname': new FormControl('',Validators.required),
       'password': new FormControl('',Validators.required),
       'confirmPassword': new FormControl('',Validators.required),
-      'email': new FormControl('',[Validators.required,this.asyncValidator.bind(this)]),
+      'email': new FormControl('',[Validators.required]),
       'number': new FormControl('',Validators.required),
       'birthday': new FormControl('',Validators.required),
       'gender': new FormControl('Male',Validators.required),
-      },{validators:this.confirmPassValidator}
+      }
       );
    }
 
   ngOnInit() {
     this.auth.isUserExistsObservable.subscribe(data => {
-      this.user.getUser(data).subscribe(data2 => {
+      /* this.user.getUser(data).subscribe(data2 => {
         this.userDetails = data2;
         console.log(this.userDetails)
         this.myForm.setValue({
@@ -54,7 +54,7 @@ export class ProfileComponent implements OnInit {
           birthday:data2.dob,
           gender:data2.gender
         });
-      })
+      }) */
     })
   }
 

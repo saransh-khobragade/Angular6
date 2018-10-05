@@ -31,12 +31,12 @@ interface isUser {
 })
 export class AuthService {
 
-  private user = new ReplaySubject<string>();
+  private user = new ReplaySubject<boolean>();
   isUserExistsObservable = this.user.asObservable();
 
   constructor(private http: HttpClient) { }
 
-  userAlive(value:string){
+  userAlive(value:boolean){
     this.user.next(value)
     this.user.complete()
   }

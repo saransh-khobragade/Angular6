@@ -10,35 +10,37 @@ import { UserService } from '../../service/user.service';
 })
 export class HeaderComponent implements OnInit {
 
-  userExists:string;
+  username:string
   userAlive:boolean
 
   constructor(private auth:AuthService,private router:Router,private user:UserService) {
 
-    this.auth.isUserExistsObservable.subscribe( data=>{
-      if(data==="")
-      { this.userAlive=false }
-      else 
-      { this.userAlive=true }
-    });
   }
 
   ngOnInit() {
+
     this.auth.isUserExistsObservable.subscribe(data=>
       {
-        this.user.getUser(data).subscribe(data2=>{
-          this.userExists=data2.fname;
-        })
-    
+        this.userAlive=data
+        if(data){
+          
+          this.user.userDetails.subscribe(data=>
+          {
+            console.log(data.fname)
+            this.username=data.fname
+          })
+        }
   })
+
   }
 
   logout(){
-    this.auth.logout(this.userAlive).subscribe(data=>{
+    this.auth.logout(this.username).subscribe(data=>{
       if(data){
         this.router.navigate(['login']);
-        this.auth.userAlive("")
+        this.auth.userAlive(false)
       }
 
-
+    })
+  }
 }

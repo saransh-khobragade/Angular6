@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpParams } from '@angular/common/http'
-import { Observable } from '../../../node_modules/rxjs';
+import { ReplaySubject } from '../../../node_modules/rxjs';
 
 interface user {
     fname: string,
@@ -19,7 +19,15 @@ interface user {
 
 export class UserService {
 
+    private user = new ReplaySubject<user>();
+    userDetails = this.user.asObservable();
+    
     constructor(private http: HttpClient) { }
+
+    setUserDetails(user:user){
+        this.user.next(user)
+        this.user.complete()
+      }
 
     signUpUser(fname,lname, email, password, phone, gender, dob) {
         return this.http.post<user>('/api/user', {fname,lname, email, password, phone, gender, dob }, { observe: 'response' });

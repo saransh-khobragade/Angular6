@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Directive,Component, OnInit, Input } from '@angular/core';
 import { AuthService } from '../service/auth.service';
 
 @Component({
@@ -8,25 +8,12 @@ import { AuthService } from '../service/auth.service';
 })
 export class HomeComponent implements OnInit {
 
-  @Input() userExists:string;
   userAlive:boolean
 
   constructor(private auth:AuthService) {
-    
-    this.userExists="hidden"
 
-    this.auth.isUserExistsObservable.subscribe( data=>{
-
-      if(data)
-      {
-        this.userExists="visible"
-      }
-      else
-      {
-        this.userExists="hidden"
-
-      } 
-   });
+    this.userAlive=false
+    this.auth.isUserExistsObservable.subscribe( data=> this.userAlive=data)
   }
 
   ngOnInit() {

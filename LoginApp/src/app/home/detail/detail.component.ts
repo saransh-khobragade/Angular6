@@ -22,15 +22,7 @@ export class DetailComponent implements OnInit {
 
   ngOnInit() { 
     
-      this.auth.isUserExistsObservable.subscribe(data=>
-        {
-          this.user.getUser(data).subscribe(data2=>{
-            this.userDetails=data2;
-          })
-      
-    })
-
-    
+      this.user.userDetails.subscribe(data=>this.userDetails=data);    
   }
 
 }

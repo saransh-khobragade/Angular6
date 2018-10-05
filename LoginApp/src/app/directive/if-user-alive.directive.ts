@@ -12,10 +12,14 @@ export class IfUserAliveDirective implements OnChanges{
   }
 
   ngOnChanges(){
+    
     if(this.appIfUserAlive){
       this.render.setElementStyle(this.ele.nativeElement,'visibility','visible')
     }
-    else this.render.setElementStyle(this.ele.nativeElement,'visibility','hidden')
+    else {
+      this.render.setElementStyle(this.ele.nativeElement,'visibility','hidden')
+    }
+
   }
 
 }

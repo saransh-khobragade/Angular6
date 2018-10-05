@@ -38,7 +38,6 @@ export class AuthService {
 
   userAlive(value:boolean){
     this.user.next(value)
-    this.user.complete()
   }
 
   isUser(username, password){

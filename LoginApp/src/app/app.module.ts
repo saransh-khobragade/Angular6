@@ -17,6 +17,7 @@ import { SignupComponent } from './home/board/signup/signup.component';
 import { ProfileComponent } from './home/board/profile/profile.component';
 import { StatusComponent } from './home/board/status/status.component';
 import { IfUserAliveDirective } from './directive/if-user-alive.directive';
+import { FilterPipe } from './pipe/filter.pipe';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { IfUserAliveDirective } from './directive/if-user-alive.directive';
     ProfileComponent,
     SignupComponent,
     StatusComponent,
-    IfUserAliveDirective
+    IfUserAliveDirective,
+    FilterPipe
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../../service/auth.service';
 
 @Component({
   selector: 'app-status',
@@ -6,8 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./status.component.css']
 })
 export class StatusComponent implements OnInit {
-
-  constructor() { }
+  
+  userAlive:Boolean
+  
+  constructor(private auth:AuthService) {
+    this.userAlive=false
+    this.auth.isUserExistsObservable.subscribe( data=> this.userAlive=data)
+   }
 
   ngOnInit() {
   }

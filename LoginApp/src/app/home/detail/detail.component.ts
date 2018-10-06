@@ -16,6 +16,10 @@ export class DetailComponent implements OnInit {
     phone:4567,
     dob:""
   }
+
+  recommendedUser={
+    users:['Ankita','Neelam','Chaya','shalini','srishti','rahul','anand','vikas','vishal']
+  }
   userAlive:string;
   
   constructor(private user:UserService,private auth:AuthService) { }

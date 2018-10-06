@@ -87,13 +87,13 @@ export class ProfileComponent implements OnInit {
      this.isSave=!this.isSave
    }
    updateDetails(){
-    this.user.updateUser(this.myForm.value.firstname,this.myForm.value.lastname, this.myForm.value.email, this.myForm.value.password, this.myForm.value.number, this.myForm.value.gender, this.myForm.value.birthday)
+    /* this.user.updateUser(this.myForm.value.firstname,this.myForm.value.lastname, this.myForm.value.email, this.myForm.value.password, this.myForm.value.number, this.myForm.value.gender, this.myForm.value.birthday)
     .subscribe(res => {
       if (res.status == 200)
         console.log(res)
       else
       alert('not done')
-    });
+    }); */
    }
 
 }

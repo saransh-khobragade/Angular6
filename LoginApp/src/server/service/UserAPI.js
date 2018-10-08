@@ -16,8 +16,8 @@ exports.login = async (req,res)=>{		//login API
 				}
 				else if(!output){
 					return res.json({success: false, message:'Incorrect Password'})
-				}
-				req.session[email] = email
+				} 
+				req.session[email] = output._id
 				req.session.save()
 				res.json({success: true, message:'Login Success'})
 			})
@@ -26,7 +26,8 @@ exports.login = async (req,res)=>{		//login API
 };
 
 exports.isUserLoggedIn = async (req,res)=>{
-	res.json({status: req.session[req.query.email]? true : false })
+console.log(req.session)
+	return res.json({status: req.session[req.query.email]? true : false })
 };
 
 exports.profile = async (req,res)=>{

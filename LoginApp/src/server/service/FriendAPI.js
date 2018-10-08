@@ -85,4 +85,24 @@ exports.getAllFriends = async (req, res) => {
 	})
 };
 
-exports.getRecommendedFriends = async (req, res) => {};
+exports.getRecommendedFriends = async (req, res) => {
+	var users = [];
+	var friends = [];
+	User.find().stream()
+		.on('data', function(user){
+			console.log(user.email)
+			users.push(user.email) 
+		})
+		.on('error', function(err){
+			return res.json({success: false, message:'Something went wrong'})  
+		})
+		.on('end', function(){
+			User.findOne({email: req.query.email}, function(err, user){
+				if (err) {  
+					return res.json({success: false, message:'Something went wrong'})  
+				} 
+				friends = user.friends
+			})
+			return res.json(users.filter(x => !friends.includes(x)));
+		});
+};

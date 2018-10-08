@@ -3,18 +3,31 @@ const ProfilePicture = require('../model/ProfilePicture')
 
 exports.login = async (req,res)=>{		//login API
     const{email,password}=req.body
-    const result = await User.findOne({email,password})
-    if(!result){
-        return res.json({success: false, message:'Email/Password incorrect'})
-    }
-	req.session[email] = email
-    req.session.save()
-	console.log(req.session)
-	res.json({success: true, message:'Login Success'})
+	User.findOne({email},(function (err, result) {
+		if (err) {
+			return res.json({success: false, message: 'Something went wrong'})
+		} 
+		else if(!result)
+			return res.json({success:false,message: 'Email id doesn\'t exists'})
+		else{
+			User.findOne({email,password}, function(error, output){
+				if (err) {
+					return res.json({success: false, message: 'Something went wrong'})
+				}
+				else if(!output){
+					return res.json({success: false, message:'Incorrect Password'})
+				} 
+				req.session[email] = output._id
+				req.session.save()
+				res.json({success: true, message:'Login Success'})
+			})
+		}
+	}))  
 };
 
 exports.isUserLoggedIn = async (req,res)=>{
-	res.json({status: req.session[req.query.email]? true : false })
+console.log(req.session)
+	return res.json({status: req.session[req.query.email]? true : false })
 };
 
 exports.profile = async (req,res)=>{
@@ -66,11 +79,18 @@ exports.getOneUser = async (req, res)=>{			// get user with id
 };
 
 exports.editUser = async (req, res)=>{			// update user details	
-	User.updateOne({ email: req.query.email }, req.body, function(err){
+	const email = req.query.email
+	User.findOne({email}, function(err, user) {		
+		if(err){
+			return res.json({success: false, message:'Something went wrong'})
+		} else if(!user)
+			return res.json({success: false, message:'User doesn\'t exist'})
+		User.updateOne({ email }, {$set: req.body}, function(err){
 			if(err){
 				return res.json({success: false, message:'Something went wrong'})
 			}
 			return res.json({success: true, message:'User details updated successfully'})
+		})
 	})
 };
 
@@ -103,5 +123,5 @@ exports.uploadProfilePic = async (req, res)=> {
 
 exports.logout = async (req,res)=>{
 	delete req.session[req.query.email]
-	res.json({success:true})
+	return res.json({success:true})
 };

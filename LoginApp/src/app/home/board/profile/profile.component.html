@@ -95,7 +95,7 @@
 
         <div class="form-group row ">
             <div class="col-sm-12">
-                <button *ngIf="isSave" (click)="changeSave();" [disabled]="!myForm.valid" class="btn btn-md m-2">Save</button>
+                <button *ngIf="isSave" (click)="changeSave();update();" [disabled]="!myForm.valid" class="btn btn-md m-2">Save</button>
                 <button *ngIf="!isSave" (click)="changeSave()" class="btn btn-md m-2">Edit</button>
             </div>
         </div>

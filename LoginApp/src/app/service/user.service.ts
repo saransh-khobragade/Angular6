@@ -10,7 +10,10 @@ interface user {
     gender:string,
     dob:string
   }
-  
+interface res{
+    success:boolean,
+    message:string
+}
 
 
 @Injectable({
@@ -32,7 +35,7 @@ export class UserService {
         return this.http.post<user>('/api/user', {fname,lname, email, password, phone, gender, dob }, { observe: 'response' });
     }
 
-    updateUser(fname,lname, email, password, phone, gender, dob){
+    updateUser<res>(fname,lname, email, password, phone, gender, dob){
         return this.http.put<user>('/api/user', {fname,lname, email, password, phone, gender, dob }, { observe: 'response' });
     }
 

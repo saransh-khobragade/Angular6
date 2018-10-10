@@ -34,7 +34,7 @@ export class ProfileComponent implements OnInit {
         'email': new FormControl('', [Validators.required, this.asyncValidator.bind(this)]),
         'number': new FormControl('', Validators.required),
         'birthday': new FormControl('', Validators.required),
-        'gender': new FormControl('Male', Validators.required),
+        'gender': new FormControl('', Validators.required),
       }, { validators: this.confirmPassValidator }
     );
   }
@@ -79,6 +79,8 @@ export class ProfileComponent implements OnInit {
   }
 
   asyncValidator(control: FormControl) {
+    if(this.userDetails.email===control.value) return null
+
     return this.auth.isUserExists(control.value).subscribe(res => {
       if (res.status == 200 && !res.body.success) {
         var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
@@ -96,5 +98,11 @@ export class ProfileComponent implements OnInit {
     this.isSave = !this.isSave
   }
 
+  update(form){
+    this.user.updateUser(this.myForm.value.firstname,this.myForm.value.lastname, this.myForm.value.email, this.myForm.value.password, this.myForm.value.number, this.myForm.value.gender, this.myForm.value.birthday)
+    .subscribe(data=>{
+   console.log(data)   
+  })
 
+  }
 }

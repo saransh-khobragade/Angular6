@@ -1,7 +1,9 @@
 const mongoose = require('../module/Connection')
+const userSeq = require('mongoose-sequence') (mongoose)
 //const Notification = require('./Notification')
 
 const UserSchema = new mongoose.Schema({
+	_id: {type: Number},
     fname:{type: String, required: true},
 	lname:{type: String, required: true},
 	email:{type: String, required: true},
@@ -15,7 +17,7 @@ const UserSchema = new mongoose.Schema({
 	if (err) { 
        console.log(err); 
      }
-})
-
+},{ _id: false })
+UserSchema.plugin(userSeq);
 const User = mongoose.model('User',UserSchema)
 module.exports = User

@@ -9,7 +9,6 @@ const app = express()
 var preInterceptor = interceptor(function(req, res){
 	return {
 		isInterceptable: function(){
-		console.log(connection.mongoose)
 			if(false)
 				return res.json({success: false, message:'Mongodb is down'})
 		}

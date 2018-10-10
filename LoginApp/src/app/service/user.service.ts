@@ -26,7 +26,6 @@ export class UserService {
 
     setUserDetails(user:user){
         this.user.next(user)
-        this.user.complete()
       }
 
     signUpUser(fname,lname, email, password, phone, gender, dob) {

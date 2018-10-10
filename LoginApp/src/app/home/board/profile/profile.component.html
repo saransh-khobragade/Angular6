@@ -1,5 +1,5 @@
 <div class="container">
-    <form ngNativeValidate #id [formGroup]="myForm2">
+    <form ngNativeValidate #id [formGroup]="myForm">
         <div class="form-group row">
             <label for="staticEmail" class="col-sm-6 col-form-label">Fisrt Name</label>
             <div class="col-sm-6">
@@ -95,7 +95,7 @@
 
         <div class="form-group row ">
             <div class="col-sm-12">
-                <button *ngIf="isSave" (click)="changeSave();updateDetails()" [disabled]="!myForm2.valid" class="btn btn-md m-2">Save</button>
+                <button *ngIf="isSave" (click)="changeSave();" [disabled]="!myForm.valid" class="btn btn-md m-2">Save</button>
                 <button *ngIf="!isSave" (click)="changeSave()" class="btn btn-md m-2">Edit</button>
             </div>
         </div>

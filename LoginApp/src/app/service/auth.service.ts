@@ -3,6 +3,7 @@ import { HttpClient,HttpParams,HttpErrorResponse } from '@angular/common/http'
 import { Observable,throwError } from '../../../node_modules/rxjs';
 import { retry,catchError } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { UserService } from './user.service';
 
 interface register {
   success: boolean,
@@ -33,8 +34,25 @@ export class AuthService {
 
   private user = new ReplaySubject<boolean>();
   isUserExistsObservable = this.user.asObservable();
+  
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private userservice:UserService) { 
+    
+    if(sessionStorage.getItem("user")!==null){
+      this.userservice.getUser(sessionStorage.getItem("user")).subscribe(data=>{
+        
+        this.isUserExists(data.email).subscribe(data2=>{
+          if(data2.body.success)
+          {
+            console.log("usersessionAlive")
+            this.userAlive(true)
+            this.userservice.setUserDetails(data)
+          }
+        })
+      })
+    }
+    this.userAlive(false)
+  }
 
   userAlive(value:boolean){
     this.user.next(value)

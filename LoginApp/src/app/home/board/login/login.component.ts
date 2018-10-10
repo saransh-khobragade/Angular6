@@ -34,6 +34,8 @@ export class LoginComponent implements OnInit {
       if(res.status==200){
         if(res.body.success){
           this.Auth.userAlive(true);
+          sessionStorage.setItem("user",username);
+
           this.user.getUser(username).subscribe(data=>{
             this.user.setUserDetails(data)
           })

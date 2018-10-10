@@ -19,6 +19,7 @@ import { StatusComponent } from './home/board/status/status.component';
 import { IfUserAliveDirective } from './directive/if-user-alive.directive';
 import { FilterPipe } from './pipe/filter.pipe';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,7 +44,7 @@ import { FilterPipe } from './pipe/filter.pipe';
        [
       {
          path: 'login',
-        component: LoginComponent
+        component: LoginComponent,
       },
       {
         path: 'profile',
@@ -52,11 +53,13 @@ import { FilterPipe } from './pipe/filter.pipe';
       },
       {
         path: 'signup',
-        component:SignupComponent
+        component:SignupComponent,
+        canActivate:[AuthGuard]
       },
       {
         path: 'home',
-        component:StatusComponent
+        component:StatusComponent,
+        canActivate:[AuthGuard]
       },
       {
         path: '',

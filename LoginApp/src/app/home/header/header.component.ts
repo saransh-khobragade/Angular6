@@ -26,7 +26,6 @@ export class HeaderComponent implements OnInit {
           
           this.user.userDetails.subscribe(data=>
           {
-            console.log(data.fname)
             this.username=data.fname
           })
         }

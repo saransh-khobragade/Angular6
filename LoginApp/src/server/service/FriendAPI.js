@@ -4,6 +4,7 @@ const Notification = require('../model/Notification')
 
 exports.invite = async (req, res) => {
 	const{email,friend}=req.body
+	console.log(req.session[email])
 	if(!req.session[email])
 		 return res.json({success: false, message:'User not logged in'})
 //	User.findOne({email}, function(err, user){
@@ -86,23 +87,38 @@ exports.getAllFriends = async (req, res) => {
 };
 
 exports.getRecommendedFriends = async (req, res) => {
+	const email = req.query.email
+	if(email == null)
+		return res.json({success: false, message:'Please send email as query param'})  
 	var users = [];
 	var friends = [];
 	User.find().stream()
 		.on('data', function(user){
-			console.log(user.email)
 			users.push(user.email) 
 		})
 		.on('error', function(err){
 			return res.json({success: false, message:'Something went wrong'})  
 		})
 		.on('end', function(){
-			User.findOne({email: req.query.email}, function(err, user){
+			User.findOne({email}, function(err, user){
 				if (err) {  
 					return res.json({success: false, message:'Something went wrong'})  
-				} 
+				} else if(!user) {
+					return res.json({success: false, message:'User doesnt exist'})  
+				}
 				friends = user.friends
+				friends.push(email)
 			})
-			return res.json(users.filter(x => !friends.includes(x)));
+			Notification.find({creater:email}).stream()
+				.on('data', function(notf){
+					console.log(notf.receiver)
+					friends.push(notf.receiver) 
+				})
+				.on('error', function(err){
+					return res.json({success: false, message:'Something went wrong'})  
+				})
+				.on('end', function(){
+					return res.json(users.filter(x => !friends.includes(x)));
+				})
 		});
 };

@@ -47,6 +47,10 @@ export class UserService {
         return this.http.get<user>('/api/user/',options);
       }
 
+    getRecommendedFriends(email){
+        return this.http.get('/api/friend/recommend',{ observe: 'response', params:{email:email}  });
+    }
+
 
 
 

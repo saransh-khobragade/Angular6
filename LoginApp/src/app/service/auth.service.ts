@@ -44,7 +44,6 @@ export class AuthService {
         this.isUserExists(data.email).subscribe(data2=>{
           if(data2.body.success)
           {
-            console.log("usersessionAlive")
             this.userAlive(true)
             this.userservice.setUserDetails(data)
           }

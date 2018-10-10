@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
 
 
     this.Auth.isUser(username,password).subscribe(res=>{
-      console.log(res.body)
+      
       if(res.status==200){
         if(res.body.success){
           this.Auth.userAlive(true);

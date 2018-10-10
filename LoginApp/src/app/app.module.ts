@@ -18,6 +18,8 @@ import { ProfileComponent } from './home/board/profile/profile.component';
 import { StatusComponent } from './home/board/status/status.component';
 import { IfUserAliveDirective } from './directive/if-user-alive.directive';
 import { FilterPipe } from './pipe/filter.pipe';
+import { FriendsComponent } from './home/board/friends/friends.component';
+import { MessagesComponent } from './home/board/messages/messages.component';
 
 
 @NgModule({
@@ -33,7 +35,9 @@ import { FilterPipe } from './pipe/filter.pipe';
     SignupComponent,
     StatusComponent,
     IfUserAliveDirective,
-    FilterPipe
+    FilterPipe,
+    FriendsComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,

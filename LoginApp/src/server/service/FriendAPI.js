@@ -88,6 +88,8 @@ exports.getAllFriends = async (req, res) => {
 
 exports.getRecommendedFriends = async (req, res) => {
 	const email = req.query.email
+	if(email == null)
+		return res.json({success: false, message:'Please send email as query param'})  
 	var users = [];
 	var friends = [];
 	User.find().stream()
@@ -101,7 +103,9 @@ exports.getRecommendedFriends = async (req, res) => {
 			User.findOne({email}, function(err, user){
 				if (err) {  
 					return res.json({success: false, message:'Something went wrong'})  
-				} 
+				} else if(!user) {
+					return res.json({success: false, message:'User doesnt exist'})  
+				}
 				friends = user.friends
 				friends.push(email)
 			})

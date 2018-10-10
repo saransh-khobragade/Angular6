@@ -9,7 +9,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent {
 
   userDetails = {
     fname: "",
@@ -37,34 +37,31 @@ export class ProfileComponent implements OnInit {
         'gender': new FormControl('', Validators.required),
       }, { validators: this.confirmPassValidator }
     );
+
+    this.fetchUserData()
   }
 
-  ngOnInit() {
+  fetchUserData() {
     this.auth.isUserExistsObservable.subscribe(data => {
 
-      if(data){
-          
-        this.user.userDetails.subscribe(data=>
-        {
-          this.userDetails=data
-          
-          this.myForm.setValue({
-            firstname: data.fname, 
-            lastname: data.lname,
-            password:"",
-            confirmPassword:"",
-            email:data.email,
-            number:data.phone,
-            birthday:data.dob,
-            gender:data.gender[0].toUpperCase()+data.gender.slice(1,).toLocaleLowerCase()
-        })
-      })
-    }
-  })
+      if (data) {
 
-  
-     
-  
+        this.user.userDetails.subscribe(data => {
+          this.userDetails = data
+
+          this.myForm.setValue({
+            firstname: data.fname,
+            lastname: data.lname,
+            password: "",
+            confirmPassword: "",
+            email: data.email,
+            number: data.phone,
+            birthday: data.dob,
+            gender: data.gender[0].toUpperCase() + data.gender.slice(1).toLocaleLowerCase()
+          })
+        })
+      }
+    })
   }
 
   confirmPassValidator(control: FormGroup): null | { invalid: boolean } {
@@ -79,7 +76,7 @@ export class ProfileComponent implements OnInit {
   }
 
   asyncValidator(control: FormControl) {
-    if(this.userDetails.email===control.value) return null
+    if (this.userDetails.email === control.value) return null
 
     return this.auth.isUserExists(control.value).subscribe(res => {
       if (res.status == 200 && !res.body.success) {
@@ -88,7 +85,7 @@ export class ProfileComponent implements OnInit {
           control.setErrors(null)
         }
       }
-      
+
       return res.body.success ? null : { emailTaken: true };
     }
     );
@@ -98,11 +95,19 @@ export class ProfileComponent implements OnInit {
     this.isSave = !this.isSave
   }
 
-  update(form){
-    this.user.updateUser(this.myForm.value.firstname,this.myForm.value.lastname, this.myForm.value.email, this.myForm.value.password, this.myForm.value.number, this.myForm.value.gender, this.myForm.value.birthday)
-    .subscribe(data=>{
-   console.log(data)   
-  })
+  update(form) {
+    this.user.updateUser(this.myForm.value.firstname, this.myForm.value.lastname, this.myForm.value.email, this.myForm.value.password, this.myForm.value.number, this.myForm.value.gender, this.myForm.value.birthday)
+      .subscribe(res => {
+        
+              if(res.body.success){
+                console.log("data updated")
+                this.user.getUser(this.userDetails.email).subscribe(data=>{
+                  this.user.setUserDetails(data)
+                })
+                this.isSave = !this.isSave
+              }
+                
+      })
 
   }
 }

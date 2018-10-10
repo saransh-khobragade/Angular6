@@ -35,8 +35,10 @@ export class UserService {
         return this.http.post<user>('/api/user', {fname,lname, email, password, phone, gender, dob }, { observe: 'response' });
     }
 
-    updateUser<res>(fname,lname, email, password, phone, gender, dob){
-        return this.http.put<user>('/api/user', {fname,lname, email, password, phone, gender, dob }, { observe: 'response' });
+    updateUser(fname,lname, email, password, phone, gender, dob){
+        const params = new HttpParams();
+        params.set('email', email);
+        return this.http.put<res>('/api/user', {fname,lname, email, password, phone, gender, dob },{ observe: 'response', params:{email:email}  });
     }
 
     getUser(username){

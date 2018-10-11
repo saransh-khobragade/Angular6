@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { UserService } from '../../service/user.service';
 import { AuthService } from '../../service/auth.service';
 
@@ -7,7 +7,7 @@ import { AuthService } from '../../service/auth.service';
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.css']
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnChanges {
  
   userDetails={
     id:0,
@@ -20,22 +20,31 @@ export class DetailComponent implements OnInit {
   }
 
   recommendedUser={
-    users:['Ankita','Neelam','Chaya','shalini','srishti','rahul','anand','vikas','vishal']
+    users:[]
   }
   userAlive:string;
-  
-  constructor(private user:UserService,private auth:AuthService) { }
+  reccuser:string
 
-  ngOnInit() { 
-    
-      this.user.userDetails.subscribe(data=>{
-        this.userDetails=data
-        this.user.getRecommendedFriends(this.userDetails.email).subscribe(data=>{
-        console.log(data)
-        })
-       
-      });
+  constructor(private user:UserService,private auth:AuthService) { 
+
+    this.user.userDetails.subscribe(data=>{
+      this.userDetails=data
+      this.user.getRecommendedFriends(this.userDetails.email).subscribe(data=>{
+        let usr=Array.prototype.slice.apply(data.body)
+        usr.forEach(element => {
+          this.recommendedUser.users.push(element.fname)
+        });
+        
       
+      })
+     
+    });
+    
+  }
+
+  ngOnChanges() { 
+    
+    
   }
 
   

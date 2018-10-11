@@ -1,12 +1,6 @@
 const User = require('../model/Users')
 const Notification = require('../model/Notification')
 
-function userModel(fname, email, id) {
-    this.fname = fname;
-    this.email = email;
-    this.id = id;
-}
-
 function filterUser(data,data2){
     var filter = [];
 	for(var i=0; i<data.length; i++){
@@ -183,9 +177,9 @@ exports.getRecommendedFriends = async (req, res) => {
 	if(email == null || email == "")
 		return res.json({success: false, message:'Please send email as query param'})  
 	else {
-		User.find().stream()
+		User.find().select('fname email _id').stream()
 			.on('data', function(user){
-				users.push(new userModel(user.fname, user.email, user._id))
+				users.push(user)
 			})
 			.on('error', function(err){
 				return res.json({success: false, message:'Something went wrong'})  

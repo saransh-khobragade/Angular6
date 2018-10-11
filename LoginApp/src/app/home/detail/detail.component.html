@@ -4,10 +4,10 @@
       <h3>{{userDetails.fname}}</h3>
   
 </div>
-<input #input1 (keyup)="0" class="form-control mr-sm-1" type="text" placeholder="Search User" aria-label="Search">
+<input [(ngModel)]="reccuser" class="form-control mr-sm-1" type="text" placeholder="Search User" aria-label="Search">
 <div class="m-1">
   <ul class="list-group">
-      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let user of recommendedUser.users | filter: input1.value " >
+      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let user of recommendedUser.users | filter: reccuser " >
             {{user}}
           <button class="btn btn-light">Invite</button>
       </li>

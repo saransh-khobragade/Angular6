@@ -138,6 +138,7 @@ exports.getRecommendedFriends = async (req, res) => {
 					res.json({success: false, message:'Something went wrong'})  
 				})
 				.on('end', function(){
+					    console.log(users,friends)
 						res.json(findUnCommon(users,friends))
 				})
 		});

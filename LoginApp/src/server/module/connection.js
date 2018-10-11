@@ -27,5 +27,4 @@ process.on('SIGINT', function() {
   }); 
 });
 exports.mongoose = mongoose
-console.log(exports.mongoose)
 module.exports = conn

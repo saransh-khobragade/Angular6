@@ -7,11 +7,12 @@ function userModel(fname, email, id) {
     this.id = id;
 }
 
-function findUnCommon(data,data2){
+function filterUser(data,data2){
     var filter = [];
-   for(var i=0; i<data.length; i++)
-       if(data2.indexOf(data[i].email)<0)
-            filter.push(data[i]);
+	for(var i=0; i<data.length; i++){
+		if(data2.indexOf(data[i].email)<0)
+			filter.push(data[i]);
+		}
    return filter;
 }
 
@@ -158,16 +159,21 @@ exports.getAllFriends = async (req, res) => {
 	var users;
 	if(email == null || email == "")
 		return res.json({success: false, message:'Please send email as query param'})  
-	
-	User.findOne({email}, function(err, user){
-		if (err) {  
+	else {
+		User.findOne({email}, function(err, user){
+			if (err) {  
 				return res.json({success: false, message:'Something went wrong'})  
-		}
-		friends = user.friends
-	})
-	User.find({email: { $in: friends}}, function(err, docs){
-		console.log(docs);
-	});
+			} else if (!user)
+				return res.json({success: false, message:'User doesn\'t exist'})  
+			friends = user.friends
+			User.find({email: { $in: friends}}, function(err, list){
+				if (err) {  
+					return res.json({success: false, message:'Something went wrong'})  
+				}
+				return res.json(list)  
+			}).select('fname email _id');
+		})
+	}
 };
 
 exports.getRecommendedFriends = async (req, res) => {
@@ -201,9 +207,9 @@ exports.getRecommendedFriends = async (req, res) => {
 							return res.json({success: false, message:'Something went wrong'})  
 						})
 						.on('end', function(){
-							return res.json(findUnCommon(users,friends))
+							return res.json(filterUser(users, friends))
 						})
-					})
+				})
 			});
 	}
 };

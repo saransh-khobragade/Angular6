@@ -1,6 +1,5 @@
 const User = require('../model/Users')
 const Notification = require('../model/Notification')
-const lodash = require('lodash')
 
 function userModel(fname, email, id) {
     this.fname = fname;
@@ -10,23 +9,50 @@ function userModel(fname, email, id) {
 
 exports.invite = async (req, res) => {
 	const{email,friend}=req.body
-	User.findOne({email}, function(err, user){
-		if (err) {  
-				return res.json({success: false, message:'Something went wrong'})  
-		} 
-		console.log(user.friends)
-		if(user.friends.indexOf(friend)<0){
-				return res.json({success: false, message:'Already friends'})
-		}
-	})
-	
-	const entry = new Notification({type: 'invite', creater: email, receiver: friend})
-	entry.save(function (err) {  
-        if (err) {  
-            return res.json({success: false, message:'Something went wrong'})  
-        }  
-        return res.json({success: true, message:'Friend request sent'})  
-    })
+	if(email != friend) {
+		User.findOne({email:friend}, function(err, user){
+			if (err) {  
+					return res.json({success: false, message:'Something went wrong'})  
+			} if(!user){
+				return res.json({success: false, message:'Friend id is wrong'})
+			}
+			User.findOne({email}, function(err, user){
+				if (err) {  
+						return res.json({success: false, message:'Something went wrong'})  
+				} if(user){
+					if(user.friends.indexOf(friend)>=0){
+						return res.json({success: false, message:'Already friends'})
+					} else {
+						Notification.findOne({type: 'invite', creater: email, receiver: friend}, function(err, notf){
+							if (err) {  
+								return res.json({success: false, message:'Something went wrong'})  
+							} else if (notf){
+								return res.json({success: false, message:'Request Already sent'}) 
+							} else {
+								Notification.findOne({type: 'invite', creater: friend, receiver: email}, function(err, notf){
+									if (err) {  
+										return res.json({success: false, message:'Something went wrong'})  
+									} else if (notf){
+										return res.json({success: false, message:'Aleady invited'})
+									} else {
+										const entry = new Notification({type: 'invite', creater: email, receiver: friend})
+										entry.save(function (err) {  
+											if (err) {  
+												return res.json({success: false, message:'Something went wrong'})  
+											}  
+											return res.json({success: true, message:'Friend request sent'})  
+										})
+									}
+								})
+							}
+						})
+					}
+				} else
+					return res.json({success: false, message:'User doesn\'t exist'})
+			})
+		})
+	} else
+		return res.json({success: false, message:'Can\'t send invite to yourself'})
 };
 
 exports.reject = async (req, res) => {

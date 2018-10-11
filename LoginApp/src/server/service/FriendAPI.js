@@ -18,10 +18,7 @@ exports.invite = async (req, res) => {
 				return res.json({success: false, message:'Something went wrong'})  
 		} 
 		console.log(user.friends)
-		if(user.friends.length != 0){
-			console.log(lodash.filter(user.friends, x => x === friend));
-			//console.log(lodash.filter(user.friends, friend))
-			if(user.friends.find(friend))
+		if(user.friends.indexOf(friend)<0){
 				return res.json({success: false, message:'Already friends'})
 		}
 	})
@@ -89,15 +86,22 @@ exports.unFriend = async (req, res) => {
 
 exports.getAllFriends = async (req, res) => {
 	const email = req.query.email
+	var friends = []
+	var users;
 	if(email == null || email == "")
 		return res.json({success: false, message:'Please send email as query param'})  
+	
 	User.findOne({email}, function(err, user){
 		if (err) {  
 				return res.json({success: false, message:'Something went wrong'})  
-			} 
-		return res.json(user.friends)
+		}
+		friends = user.friends
 	})
+	User.find({email: { $in: friends}}, function(err, docs){
+		console.log(docs);
+	});
 };
+
 function findUnCommon(data,data2){
     var filter = [];
    for(var i=0; i<data.length; i++)
@@ -138,7 +142,6 @@ exports.getRecommendedFriends = async (req, res) => {
 					res.json({success: false, message:'Something went wrong'})  
 				})
 				.on('end', function(){
-					    console.log(users,friends)
 						res.json(findUnCommon(users,friends))
 				})
 		});

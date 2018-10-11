@@ -10,9 +10,6 @@ function userModel(fname, email, id) {
 
 exports.invite = async (req, res) => {
 	const{email,friend}=req.body
-	console.log(req.session[email])
-	if(!req.session[email])
-		 return res.json({success: false, message:'User not logged in'})
 	User.findOne({email}, function(err, user){
 		if (err) {  
 				return res.json({success: false, message:'Something went wrong'})  
@@ -30,7 +27,6 @@ exports.invite = async (req, res) => {
         }  
         return res.json({success: true, message:'Friend request sent'})  
     })
-	//event trigger
 };
 
 exports.reject = async (req, res) => {
@@ -142,7 +138,7 @@ exports.getRecommendedFriends = async (req, res) => {
 					res.json({success: false, message:'Something went wrong'})  
 				})
 				.on('end', function(){
-						res.json(findUnCommon(users,friends))
+					res.json(findUnCommon(users,friends))
 				})
 		});
 };

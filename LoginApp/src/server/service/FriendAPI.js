@@ -7,9 +7,17 @@ function userModel(fname, email, id) {
     this.id = id;
 }
 
+function findUnCommon(data,data2){
+    var filter = [];
+   for(var i=0; i<data.length; i++)
+       if(data2.indexOf(data[i].email)<0)
+            filter.push(data[i]);
+   return filter;
+}
+
 exports.invite = async (req, res) => {
 	const{email,friend}=req.body
-	if(email != friend) {
+	if(email != friend && email != null && email != "" && friend != null && friend != "") {
 		User.findOne({email:friend}, function(err, user){
 			if (err) {  
 					return res.json({success: false, message:'Something went wrong'})  
@@ -52,58 +60,96 @@ exports.invite = async (req, res) => {
 			})
 		})
 	} else
-		return res.json({success: false, message:'Can\'t send invite to yourself'})
+		return res.json({success: false, message:'Invalid scenario'})
 };
 
 exports.reject = async (req, res) => {
 	const{email,friend}=req.body
-	Notification.deleteOne({type: 'invite', creater: email, receiver: friend}, function(err){
-		if (err) {  
-            return res.json({success: false, message:'Something went wrong'})  
-        }  
-        return res.json({success: true, message:'Friend request deleted'}) 
-	})
+	if(email != friend && email != null && email != "" && friend != null && friend != "") {
+		Notification.findOne({type: 'invite', creater: email, receiver: friend}, function(err, notf){
+			if (err) {  
+				return res.json({success: false, message:'Something went wrong'})  
+			} else if (!notf){
+				return res.json({success: false, message:'Invite doesn\'t exist'}) 
+			} else {		
+				Notification.deleteOne({type: 'invite', creater: email, receiver: friend}, function(err){
+					if (err) {  
+						return res.json({success: false, message:'Something went wrong'})  
+					}  
+					return res.json({success: true, message:'Friend request deleted'}) 
+				})
+			}
+		})
+	} else 
+		return res.json({success: false, message:'Invalid scenario'})
 };
 
 exports.accept = async (req, res) => {
 	const{email,friend}=req.body
-	
-	Notification.deleteOne({type: 'invite', creater: email, receiver: friend}, function(err){
-		if (err) {  
-            return res.json({success: false, message:'Something went wrong'})  
-        }  
-        User.updateOne({ email }, { $push: { friends: friend } }, function(err){
-			if(err){
-				return res.json({success: false, message:'Friend couldn\'t be added'})  
+	if(email != friend && email != null && email != "" && friend != null && friend != "") {
+		Notification.findOne({type: 'invite', creater: email, receiver: friend}, function(err, notf){
+			if (err) {  
+				return res.json({success: false, message:'Something went wrong'})  
+			} else if (!notf){
+				return res.json({success: false, message:'Invite doesn\'t exist'}) 
+			} else {
+				Notification.deleteOne({type: 'invite', creater: email, receiver: friend}, function(err){
+					if (err) {  
+						return res.json({success: false, message:'Something went wrong'})  
+					}  
+					User.updateOne({ email }, { $push: { friends: friend } }, function(err){
+						if(err){
+							return res.json({success: false, message:'Friend couldn\'t be added'})  
+						}
+						User.updateOne({ email: friend }, { $push: { friends: email } }, function(err){
+							if(err){
+								return res.json({success: false, message:'Friend couldn\'t be added'})  
+							}
+						});
+					});
+					return res.json({success: true, message:'Friend request Accepted'}) 
+				})
 			}
-			User.updateOne({ email: friend }, { $push: { friends: email } }, function(err){
-				if(err){
-					return res.json({success: false, message:'Friend couldn\'t be added'})  
-				}
-			});
-		});
-		return res.json({success: true, message:'Friend request Accepted'}) 
-	})
+		})
+	} else 
+		return res.json({success: false, message:'Invalid scenario'})
 };
 
 exports.unFriend = async (req, res) => {
 	const email = req.query.email
 	const friend = req.query.friend
-	if(email == null || email == "")
-		return res.json({success: false, message:'Please send email as query param'})
-	if(friend == null || friend == "")
-		return res.json({success: false, message:'Please send friend as query param'})
-	 User.updateOne({ email }, { $pull: { friends: friend } }, function(err){
-		if (err) {  
-            return res.json({success: false, message:'Something went wrong1'})  
-        }  
-		User.updateOne({ email: friend }, { $pull: { friends: email } }, function(err){
+	if(email != friend && email != null && email != "" && friend != null && friend != "") {
+		User.findOne({email}, function(err, user){
 			if (err) {  
-				return res.json({success: false, message:'Something went wrong2'})  
-			}  
+					return res.json({success: false, message:'Something went wrong'})  
+			} else if (!user) {
+				return res.json({success: false, message:'Requester doesn\'t exist'})
+			} else if (user.friends.indexOf(friend)<0){
+				return res.json({success: false, message:'Friend doesn\'t exist'})
+			}
+			User.findOne({email: friend}, function(err, fnd){
+				if (err) {  
+						return res.json({success: false, message:'Something went wrong'})  
+				} else if (!fnd) {
+					return res.json({success: false, message:'Receiver doesn\'t exist'})
+				} else if (fnd.friends.indexOf(email)<0){
+					return res.json({success: false, message:'Friend doesn\'t exist'})
+				}
+				User.updateOne({ email }, { $pull: { friends: friend } }, function(err){
+					if (err) {  
+						return res.json({success: false, message:'Something went wrong'})  
+					}  
+					User.updateOne({ email: friend }, { $pull: { friends: email } }, function(err){
+						if (err) {  
+							return res.json({success: false, message:'Something went wrong'})  
+						}  
+					})
+					return res.json({success: true, message:'Unfriend successfully'})
+				})
+			})
 		})
-		return res.json({success: true, message:'Unfriend successfully'})
-	})
+	} else 
+		return res.json({success: false, message:'Invalid scenario'})
 };
 
 exports.getAllFriends = async (req, res) => {
@@ -124,47 +170,40 @@ exports.getAllFriends = async (req, res) => {
 	});
 };
 
-function findUnCommon(data,data2){
-    var filter = [];
-   for(var i=0; i<data.length; i++)
-       if(data2.indexOf(data[i].email)<0)
-            filter.push(data[i]);
-   return filter;
-}
-
 exports.getRecommendedFriends = async (req, res) => {
 	const email = req.query.email
-	if(email == null || email == "")
-		return res.json({success: false, message:'Please send email as query param'})  
 	var users = [];
 	var friends = [];
-
-	User.find().stream()
-		.on('data', function(user){
-			users.push(new userModel(user.fname, user.email, user._id))
-		})
-		.on('error', function(err){
-			res.json({success: false, message:'Something went wrong'})  
-		})
-		.on('end', function(){
-			User.findOne({email}, function(err, user){
-				if (err) {  
-					return res.json({success: false, message:'Something went wrong'})  
-				} else if(!user) {
-					return res.json({success: false, message:'User doesnt exist'})  
-				}
-				friends = user.friends
-				friends.push(email)
+	if(email == null || email == "")
+		return res.json({success: false, message:'Please send email as query param'})  
+	else {
+		User.find().stream()
+			.on('data', function(user){
+				users.push(new userModel(user.fname, user.email, user._id))
 			})
-			Notification.find({creater:email}).stream()
-				.on('data', function(notf){
-					friends.push(notf.receiver) 
-				})
-				.on('error', function(err){
-					res.json({success: false, message:'Something went wrong'})  
-				})
-				.on('end', function(){
-					res.json(findUnCommon(users,friends))
-				})
-		});
+			.on('error', function(err){
+				return res.json({success: false, message:'Something went wrong'})  
+			})
+			.on('end', function(){
+				User.findOne({email}, function(err, user){
+					if (err) {  
+						return res.json({success: false, message:'Something went wrong'})  
+					} else if(!user) {
+						return res.json({success: false, message:'User doesnt exist'})  
+					}
+					friends = user.friends
+					friends.push(email)
+					Notification.find({creater:email}).stream()
+						.on('data', function(notf){
+							friends.push(notf.receiver) 
+						})
+						.on('error', function(err){
+							return res.json({success: false, message:'Something went wrong'})  
+						})
+						.on('end', function(){
+							return res.json(findUnCommon(users,friends))
+						})
+					})
+			});
+	}
 };

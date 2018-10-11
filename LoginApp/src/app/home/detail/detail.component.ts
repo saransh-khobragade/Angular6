@@ -27,7 +27,7 @@ export class DetailComponent implements OnInit {
   ngOnInit() { 
     
       this.user.userDetails.subscribe(data=>this.userDetails=data);
-      //this.getRecommendedFriends()    
+      this.getRecommendedFriends()    
   }
 
   getRecommendedFriends()

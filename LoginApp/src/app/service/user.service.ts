@@ -3,6 +3,7 @@ import { HttpClient,HttpParams } from '@angular/common/http'
 import { ReplaySubject } from '../../../node_modules/rxjs';
 
 interface user {
+    id:number,
     fname: string,
     lname: string,
     email:string,

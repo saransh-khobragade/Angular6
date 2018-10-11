@@ -66,6 +66,16 @@ import { MessagesComponent } from './home/board/messages/messages.component';
         canActivate:[AuthGuard]
       },
       {
+        path: 'friends',
+        component:FriendsComponent,
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'messages',
+        component:MessagesComponent,
+        canActivate:[AuthGuard]
+      },
+      {
         path: '',
         component:LoginComponent
       },

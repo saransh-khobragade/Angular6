@@ -10,10 +10,12 @@ import { AuthService } from '../../service/auth.service';
 export class DetailComponent implements OnInit {
  
   userDetails={
-    fname:"User",
-    lname:"",
+    id:0,
+    fname: "",
+    lname: "",
     email:"",
-    phone:4567,
+    phone:0,
+    gender:"",
     dob:""
   }
 
@@ -26,15 +28,16 @@ export class DetailComponent implements OnInit {
 
   ngOnInit() { 
     
-      this.user.userDetails.subscribe(data=>this.userDetails=data);
-      this.getRecommendedFriends()    
+      this.user.userDetails.subscribe(data=>{
+        this.userDetails=data
+        this.user.getRecommendedFriends(this.userDetails.email).subscribe(data=>{
+        console.log(data)
+        })
+       
+      });
+      
   }
 
-  getRecommendedFriends()
-  {
-    this.user.getRecommendedFriends(this.userDetails.email).subscribe(data=>{
-      console.log("recc",data)
-    })
-  }
+  
 
 }

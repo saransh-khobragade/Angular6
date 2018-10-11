@@ -11,10 +11,10 @@
         <ul class="navbar-nav mr-auto">
 
             <li class="nav-item" *ngIf="userAlive">
-                <a class="nav-link" href="#">Friends<span> </span><span class="badge badge-secondary badge-pill">2</span></a>
+                <a class="nav-link" [routerLink]="['friends']">Friends<span> </span><span class="badge badge-secondary badge-pill">2</span></a>
             </li>
             <li class="nav-item" *ngIf="userAlive">
-                <a class="nav-link" href="#">Message<span> </span><span class="badge badge-secondary badge-pill">5</span></a>
+                <a class="nav-link" [routerLink]="['messages']">Message<span> </span><span class="badge badge-secondary badge-pill">5</span></a>
             </li>
 
         </ul>

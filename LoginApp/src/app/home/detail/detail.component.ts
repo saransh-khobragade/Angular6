@@ -7,7 +7,7 @@ import { AuthService } from '../../service/auth.service';
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.css']
 })
-export class DetailComponent implements OnChanges {
+export class DetailComponent{
  
   userDetails={
     id:0,
@@ -42,9 +42,10 @@ export class DetailComponent implements OnChanges {
     
   }
 
-  ngOnChanges() { 
-    
-    
+  invite(sender,reciever){
+    this.user.invite(this.userDetails.email,"gupta@gmail.com").subscribe(data=>{
+      console.log(data)
+    })
   }
 
   

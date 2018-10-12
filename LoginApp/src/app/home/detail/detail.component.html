@@ -7,9 +7,9 @@
 <input [(ngModel)]="reccuser" class="form-control mr-sm-1" type="text" placeholder="Search User" aria-label="Search">
 <div class="m-1">
   <ul class="list-group">
-      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let user of recommendedUser.users | filter: reccuser " >
+      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let user of recommendedUser.users" >
             {{user}}
-          <button class="btn btn-light">Invite</button>
+          <button class="btn btn-light" (click)="invite('','')">Invite</button>
       </li>
   </ul>
 </div>

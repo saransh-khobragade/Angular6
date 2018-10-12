@@ -53,6 +53,21 @@ export class UserService {
     }
 
 
+    invite(friend,email) {
+        return this.http.post('/api/friend', {friend,email}, { observe: 'response' });
+    }
+
+    getAllFriends(email){
+        return this.http.get('/api/friend/all',{ observe: 'response', params:{email:email}  });
+    }
+
+    sendInvite(sender,reciever){
+        return this.http.post('/api/friend', {sender,reciever}, { observe: 'response' });
+    }
+
+    acceptInvite(sender,reciever){
+        return this.http.post('/api/friend', {sender,reciever}, { observe: 'response' });
+    }
 
 
 

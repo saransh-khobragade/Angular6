@@ -172,38 +172,34 @@ exports.getAllFriends = async (req, res) => {
 
 exports.getRecommendedFriends = async (req, res) => {
 	const email = req.query.email
-	var users = [];
 	var friends = [];
 	if(email == null || email == "")
 		return res.json({success: false, message:'Please send email as query param'})  
 	else {
-		User.find().select('fname email _id').stream()
-			.on('data', function(user){
-				users.push(user)
-			})
-			.on('error', function(err){
+		User.findOne({email}, function(err, user){
+			if (err) {  
 				return res.json({success: false, message:'Something went wrong'})  
-			})
-			.on('end', function(){
-				User.findOne({email}, function(err, user){
-					if (err) {  
-						return res.json({success: false, message:'Something went wrong'})  
-					} else if(!user) {
-						return res.json({success: false, message:'User doesnt exist'})  
-					}
-					friends = user.friends
-					friends.push(email)
-					Notification.find({creater:email}).stream()
-						.on('data', function(notf){
-							friends.push(notf.receiver) 
-						})
-						.on('error', function(err){
-							return res.json({success: false, message:'Something went wrong'})  
-						})
-						.on('end', function(){
-							return res.json(filterUser(users, friends))
-						})
+			} else if(!user) {
+					return res.json({success: false, message:'User doesnt exist'})  
+			}
+			console.log(user.friends)
+			friends = user.friends
+			friends.push(email)
+			Notification.find({creater:email}).stream()
+				.on('data', function(notf){
+					friends.push(notf.receiver)
 				})
-			});
+				.on('error', function(){
+					return res.json({success: false, message:'Something went wrong'})  
+				})
+				.on('end', function(){
+					User.find({}, function(error, users){
+						if (error) {  
+							return res.json({success: false, message:'Something went wrong'})  
+						} 
+						return res.json(filterUser(users, friends))
+					}).select('fname email _id')
+				})
+		})
 	}
 };

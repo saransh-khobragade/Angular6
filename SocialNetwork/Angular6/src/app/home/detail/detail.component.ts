@@ -31,6 +31,7 @@ export class DetailComponent{
       this.userDetails=data
       this.user.getRecommendedFriends(this.userDetails.email).subscribe(data=>{
         let usr=Array.prototype.slice.apply(data.body)
+        
         usr.forEach(element => {
           this.recommendedUser.users.push(element.fname)
         });
@@ -43,7 +44,7 @@ export class DetailComponent{
   }
 
   invite(sender,reciever){
-    this.user.invite(this.userDetails.email,"gupta@gmail.com").subscribe(data=>{
+    this.user.sendInvite(this.userDetails.email,"gupta@gmail.com").subscribe(data=>{
       console.log(data)
     })
   }

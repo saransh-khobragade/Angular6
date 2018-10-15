@@ -10,6 +10,7 @@ function filterUser(data,data2){
    return filter;
 }
 
+
 exports.invite = async (req, res) => {
 	const{email,friend}=req.body
 	if(email != friend && email != null && email != "" && friend != null && friend != "") {

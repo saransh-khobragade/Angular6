@@ -27,7 +27,7 @@ exports.login = async (req,res)=>{		//login API
 };
 
 exports.isUserLoggedIn = async (req,res)=>{
-console.log(req.session)
+
 	return res.json({status: req.session[req.query.email]? true : false })
 };
 

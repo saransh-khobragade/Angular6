@@ -19,33 +19,34 @@ export class DetailComponent{
     dob:""
   }
 
-  recommendedUser={
-    users:[]
-  }
+  recommendedUser=[]
   userAlive:string;
   reccuser:string
 
   constructor(private user:UserService,private auth:AuthService) { 
-
+    console.log("details loaded")
     this.user.userDetails.subscribe(data=>{
       this.userDetails=data
       this.user.getRecommendedFriends(this.userDetails.email).subscribe(data=>{
-        let usr=Array.prototype.slice.apply(data.body)
-        
-        usr.forEach(element => {
-          this.recommendedUser.users.push(element.fname)
-        });
-        
-      
+        for(let a in data.body){
+          this.recommendedUser.push(data.body[a])
+        }
       })
      
     });
     
   }
 
-  invite(sender,reciever){
-    this.user.sendInvite(this.userDetails.email,"gupta@gmail.com").subscribe(data=>{
-      console.log(data)
+  invite(recieverEmail){
+    this.user.sendInvite(this.userDetails.email,recieverEmail).subscribe(res=>{
+      
+        if(res.body.success){
+
+        }
+        else{
+          alert(res.body.message)
+        }
+      
     })
   }
 

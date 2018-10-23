@@ -9,22 +9,27 @@ import { AuthService } from 'src/app/service/auth.service';
 })
 export class FriendsComponent implements OnInit {
 
+  inviteList=[]
+
   constructor(private user:UserService,private auth:AuthService) { }
   
   ngOnInit() {
 
     this.auth.isUserExistsObservable.subscribe(data=>
       {
-        
         if(data){
           
           this.user.userDetails.subscribe(data=>
           {
-            this.user.getAllFriends(data.email).subscribe(data=>console.log(data))
+            this.user.getAllInvites(data.email).subscribe(data=>{
+              for(let a in data.body){
+                 this.inviteList.push(data.body[a])
+              }
+            })
           })
         }
-    })
     
+      })
   }
 
 }

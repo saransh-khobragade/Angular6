@@ -1,31 +1,35 @@
-exports.GetCollectionAllEntries = async (Collection,...keys) => {
+exports.GetAll = async (Collection,...selectkeys) => {
 
-    if(keys.length===0){
+    if(selectkeys!==undefined){
         return Collection.find().exec().then(data=>{
             let result=[]
             data.forEach(ele => {
-                if(ele!=="_id")
-                result.push({name:ele.fname,email:ele.email})
+                result.push(ele)
             });
             return result;
         })
         .catch(err=>console.log(err));
     }
     else{
-        return Collection.find().select(keys.join(' ')).exec().then(data=>{
+        return Collection.find().select(selectkeys.join(' ')).exec().then(data=>{
             let result=[]
             data.forEach(ele => {
-                if(ele!=="_id")
-                result.push({name:ele.fname,email:ele.email})
+                result.push(ele)
             });
             return result;
         }).catch(err=>console.log(err));
     }
-    
 }
 
-exports.GetCollectionOneEntry = async (Collection,key) => {
-    return Collection.findOne(key).exec().then(data=>{
+exports.FindWithKeys = async (Collection,matchkeys,...selectkeys) => {
+    if(selectkeys!==undefined)
+    {
+        return Collection.find({$and:matchkeys}).select(selectkeys.join(' ')).exec().then(data=>{
+            return data;
+        }).catch(err=>console.log(err));
+    }
+    
+    return Collection.find({$and:matchkeys}).exec().then(data=>{
             return data;
     }).catch(err=>console.log(err));
 }

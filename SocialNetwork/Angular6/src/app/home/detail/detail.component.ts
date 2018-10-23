@@ -24,7 +24,7 @@ export class DetailComponent{
   reccuser:string
 
   constructor(private user:UserService,private auth:AuthService) { 
-    console.log("details loaded")
+    this.recommendedUser=[]
     this.user.userDetails.subscribe(data=>{
       this.userDetails=data
       this.user.getRecommendedFriends(this.userDetails.email).subscribe(data=>{

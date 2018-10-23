@@ -4,6 +4,7 @@ const session = require('express-session')
 const interceptor = require('express-interceptor')
 const connection = require('./Connection')
 const router = require('./Router')
+const morgan = require('morgan')
 const app = express()
 
 var preInterceptor = interceptor(function(req, res){
@@ -23,5 +24,6 @@ app.use(session({
 }))
 
 app.use(bodyparser.json())
+app.use(morgan('dev'))
 app.use(router);
 module.exports = app

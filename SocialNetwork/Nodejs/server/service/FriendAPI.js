@@ -186,7 +186,6 @@ exports.getRecommendedFriends = async (req, res) => {
 			resultWithoutOwnFriends.push(ele)
 		}
 	});
-
-	console.log(resultWithoutOwnFriends)
+   
 	return res.json(resultWithoutOwnFriends)
 }

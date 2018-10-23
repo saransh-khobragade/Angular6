@@ -31,6 +31,6 @@ router.delete('/api/friend', friendAPI.unFriend)	// unfriend -->  delete email f
 router.get('/api/friend/all', friendAPI.getAllFriends)	// get all friends --> return user.friends
 router.get('/api/friend/recommend', friendAPI.getRecommendedFriends) //return users-friends
 
-router.post('/api/notification', notificationAPI.openNotification)	//(remove) open notification --> push user.invite to notification, return user.invite
+router.get('/api/notification/getinvites', notificationAPI.inviteNotification)	//(remove) open notification --> push user.invite to notification, return user.invite
 
 module.exports = router;

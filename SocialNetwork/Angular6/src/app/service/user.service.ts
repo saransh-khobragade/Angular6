@@ -53,8 +53,8 @@ export class UserService {
     }
 
 
-    getAllFriends(email){
-        return this.http.get('/api/friend/all',{ observe: 'response', params:{email:email}  });
+    getAllInvites(email){
+        return this.http.get('/api/notification/getinvites',{ observe: 'response', params:{email:email}  });
     }
 
     sendInvite(myEmail,friendEmail){

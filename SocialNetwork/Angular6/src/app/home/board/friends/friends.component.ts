@@ -18,10 +18,10 @@ export class FriendsComponent implements OnInit {
     this.auth.isUserExistsObservable.subscribe(data=>
       {
         if(data){
-          
           this.user.userDetails.subscribe(data=>
           {
             this.user.getAllInvites(data.email).subscribe(data=>{
+              this.inviteList=[]
               for(let a in data.body){
                  this.inviteList.push(data.body[a])
               }
@@ -29,6 +29,27 @@ export class FriendsComponent implements OnInit {
           })
         }
     
+      })
+  }
+
+  accept(friendEmail){
+    
+    this.user.userDetails.subscribe(data=>
+      {
+        
+        this.user.acceptInvite(data.email,friendEmail).subscribe(data=>{
+          console.log(data.body)
+        })
+      })
+    
+  }
+
+  reject(friendEmail){
+    this.user.userDetails.subscribe(data=>
+      {
+        this.user.rejectInvite(data.email,friendEmail).subscribe(data=>{
+          console.log(data.body)
+        })
       })
   }
 

@@ -24,6 +24,10 @@ export class DetailComponent{
   reccuser:string
 
   constructor(private user:UserService,private auth:AuthService) { 
+    this.refreshRecommendedList()
+  }
+
+  refreshRecommendedList(){
     this.recommendedUser=[]
     this.user.userDetails.subscribe(data=>{
       this.userDetails=data
@@ -34,14 +38,12 @@ export class DetailComponent{
       })
      
     });
-    
   }
-
   invite(recieverEmail){
     this.user.sendInvite(this.userDetails.email,recieverEmail).subscribe(res=>{
       
         if(res.body.success){
-
+          this.refreshRecommendedList()
         }
         else{
           alert(res.body.message)

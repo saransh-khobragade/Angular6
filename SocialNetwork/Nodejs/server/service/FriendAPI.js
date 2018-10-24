@@ -14,96 +14,43 @@ function filterUser(data, data2) {
 
 exports.invite = async (req, res) => {
 	const { myEmail, friendEmail } = req.body
+	const noti=await db.FindWithKeys(Notification,[{ type: 'invite'},{ "creater.email": myEmail},{ "receiver.email": friendEmail }])
+	
+	if(noti.length!==0) return res.json({ success: false, message: 'Request Already sent' })
 
-	if (myEmail != friendEmail && myEmail != null && myEmail != "" && friendEmail != null && friendEmail != "") 
-	{
-		User.findOne({ email: friendEmail }, function (err,user)
-		{
-			if (user==null) {
-				return res.json({ success: false, message: 'Friend email id is wrong' })
-			}
-			User.findOne({ email: myEmail }, function (err,user) 
-			{
-				if (user) {
-					if (user.friends.indexOf(friendEmail) >= 0) {
-						return res.json({ success: false, message: 'Already Friends' })
-					} 
-					else 
-					{
-						Notification.findOne({ type: 'invite', creater: myEmail, receiver: friendEmail }, function (err, notuser) {
-							if (notuser) {
-								return res.json({ success: false, message: 'Request Already sent' })
-							} 
-							else 
-							{
-								const entry = new Notification({ type: 'invite', creater: myEmail, receiver: friendEmail })
-								entry.save(function (err) {
-									return res.json({ success: true, message: 'invitation sent' })
-								})								
-							}
-						})
-					}
-				}
-				 else
-					return res.json({ success: false, message: 'User doesn\'t exist' })
-			})
-		})
-	}
-	else
-		return res.json({ success: false, message: 'Friends/User email id is not correct' })
-};
+	const myName=await db.FindWithKeys(User,[{email:myEmail}],"fname")
+	const FriendName=await db.FindWithKeys(User,[{email:friendEmail}],"fname")
+	const entry = new Notification({ 
+		type: 'invite',
+		creater: { name:myName[0].fname, email:myEmail},
+		receiver:{ name:FriendName[0].fname , email:friendEmail}
+	})
 
-exports.reject = async (req, res) => {
-	const { email, friend } = req.body
-	if (email != friend && email != null && email != "" && friend != null && friend != "") {
-		Notification.findOne({ type: 'invite', creater: email, receiver: friend }, function (err, notf) {
-			if (err) {
-				return res.json({ success: false, message: 'Something went wrong' })
-			} else if (!notf) {
-				return res.json({ success: false, message: 'Invite doesn\'t exist' })
-			} else {
-				Notification.deleteOne({ type: 'invite', creater: email, receiver: friend }, function (err) {
-					if (err) {
-						return res.json({ success: false, message: 'Something went wrong' })
-					}
-					return res.json({ success: true, message: 'Friend request deleted' })
-				})
-			}
-		})
-	} else
-		return res.json({ success: false, message: 'Invalid scenario' })
+	entry.save(function (err) {
+		if(!err) return res.json({ success: true, message: 'invitation sent' })
+	})
 };
 
 exports.accept = async (req, res) => {
-	const { email, friend } = req.body
-	if (email != friend && email != null && email != "" && friend != null && friend != "") {
-		Notification.findOne({ type: 'invite', creater: email, receiver: friend }, function (err, notf) {
-			if (err) {
-				return res.json({ success: false, message: 'Something went wrong' })
-			} else if (!notf) {
-				return res.json({ success: false, message: 'Invite doesn\'t exist' })
-			} else {
-				Notification.deleteOne({ type: 'invite', creater: email, receiver: friend }, function (err) {
-					if (err) {
-						return res.json({ success: false, message: 'Something went wrong' })
-					}
-					User.updateOne({ email }, { $push: { friends: friend } }, function (err) {
-						if (err) {
-							return res.json({ success: false, message: 'Friend couldn\'t be added' })
-						}
-						User.updateOne({ email: friend }, { $push: { friends: email } }, function (err) {
-							if (err) {
-								return res.json({ success: false, message: 'Friend couldn\'t be added' })
-							}
-						});
-					});
-					return res.json({ success: true, message: 'Friend request Accepted' })
-				})
-			}
-		})
-	} else
-		return res.json({ success: false, message: 'Invalid scenario' })
+	const { myEmail, friendEmail } = req.body
+	const noti=await db.FindWithKeys(Notification,[{ type: 'invite'},{ "creater.email":myEmail },{ "receiver.email":friendEmail  }])
+
+	Notification.findByIdAndDelete(noti[0]._id,function(err,re){})
+
+	let a=await User.update({ email:myEmail }, { $push: { friends: friendEmail } })
+	return res.json({ success: true, message: 'Friend request Accepted' })
 };
+
+exports.reject = async (req, res) => {
+	const { myEmail, friendEmail } = req.body
+	const noti=await db.FindWithKeys(Notification,[{ type: 'invite'},{ "creater.email":myEmail },{ "receiver.email":friendEmail  }])
+
+	Notification.findByIdAndDelete(noti[0]._id,function(err,re){})
+
+	return res.json({ success: true, message: 'Friend request Rejected' })
+};
+
+
 
 exports.unFriend = async (req, res) => {
 	const email = req.query.email
@@ -169,9 +116,14 @@ exports.getAllFriends = async (req, res) => {
 exports.getRecommendedFriends = async (req, res) => {
 	const email = req.query.email
 	
-	let allUser=await db.GetCollectionAllEntries(User,"fname","email")
-	let CurrUser=await db.GetCollectionOneEntry(User,{email:email});
-	let friendsOfCurrUser=CurrUser.friends
+	let allUser=await db.GetAll(User,"fname","email")
+	let CurrUser=await db.FindWithKeys(User,[{email:email}]);
+	let friendsOfCurrUser=CurrUser[0].friends
+	let noti=await db.FindWithKeys(Notification,[{"creater.email":email}],"receiver.email");
+	let alreadyInvitedEmails=[]
+	for(usr of noti){
+		alreadyInvitedEmails.push(usr.receiver.email)
+	}
 	
 	let resultWithoutOwnEmail=[]	//eleminating own self
 	allUser.forEach(ele => {
@@ -179,13 +131,20 @@ exports.getRecommendedFriends = async (req, res) => {
 			resultWithoutOwnEmail.push(ele)
 		}
 	});
-
+	
 	let resultWithoutOwnFriends=[] 		//eleminating friends
 	resultWithoutOwnEmail.forEach(ele => {
 		if(friendsOfCurrUser.indexOf(ele.email)===-1){
 			resultWithoutOwnFriends.push(ele)
 		}
 	});
-   
-	return res.json(resultWithoutOwnFriends)
+
+	let resultWithoutOwnAlreadySend=[] 		//eleminating friends already send invites
+	resultWithoutOwnFriends.forEach(ele => {
+		if(alreadyInvitedEmails.indexOf(ele.email)===-1){
+			resultWithoutOwnAlreadySend.push(ele)
+		}
+	});
+
+	return res.json(resultWithoutOwnAlreadySend)
 }

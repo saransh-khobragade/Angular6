@@ -8,7 +8,7 @@
 <div class="m-1">
   <ul class="list-group">
       <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let user of recommendedUser" >
-            {{user.name}}
+            {{user.fname}}
           <button class="btn btn-light" (click)="invite(user.email)">Invite</button>
       </li>
   </ul>

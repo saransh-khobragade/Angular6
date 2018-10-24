@@ -14,8 +14,8 @@ Friend List
             <div class="d-flex justify-content-between align-items-center">
               <small class="text-muted">{{usr.name}}</small>
               <div class="btn-group">
-                <button type="button" class="btn btn-sm btn-outline-secondary">Accept</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary">Reject</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="accept(usr.email)">Accept</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="reject(usr.email)">Reject</button>
               </div>
 
             </div>

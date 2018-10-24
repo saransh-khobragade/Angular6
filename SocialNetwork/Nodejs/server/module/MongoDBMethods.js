@@ -1,6 +1,6 @@
 exports.GetAll = async (Collection,...selectkeys) => {
 
-    if(selectkeys!==undefined){
+    if(selectkeys===undefined){
         return Collection.find().exec().then(data=>{
             let result=[]
             data.forEach(ele => {
@@ -33,3 +33,5 @@ exports.FindWithKeys = async (Collection,matchkeys,...selectkeys) => {
             return data;
     }).catch(err=>console.log(err));
 }
+
+

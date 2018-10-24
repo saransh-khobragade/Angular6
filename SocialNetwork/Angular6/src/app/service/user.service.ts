@@ -58,13 +58,16 @@ export class UserService {
     }
 
     sendInvite(myEmail,friendEmail){
-        return this.http.post<res>('/api/friend', {myEmail,friendEmail}, { observe: 'response' });
+        return this.http.post<res>('/api/invite/send', {myEmail,friendEmail}, { observe: 'response' });
     }
 
     acceptInvite(sender,reciever){
-        return this.http.post('/api/friend', {sender,reciever}, { observe: 'response' });
+        return this.http.post('/api/invite/accept', {myEmail:sender,friendEmail:reciever}, { observe: 'response' });
     }
 
+    rejectInvite(sender,reciever){
+        return this.http.post('/api/invite/reject', {myEmail:sender,friendEmail:reciever}, { observe: 'response' });
+    }
 
 
 

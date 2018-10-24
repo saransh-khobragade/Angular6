@@ -24,9 +24,9 @@ router.get('/api/database', adminAPI.getDatabase)		//get db
 
 router.post('/api/profile/image', upload.single('profilePicture'), userAPI.uploadProfilePic) //upload user profile picture
 
-router.post('/api/friend', friendAPI.invite)	//send friend request --> create an entry in user.invite
-router.post('/api/friend/reject', friendAPI.reject)	//reject friend request --> delete the entry from notification
-router.post('/api/friend/accept', friendAPI.accept) 	// accept friend request --> delete entry from notification and add email to user.friends
+router.post('/api/invite/send', friendAPI.invite)	//send friend request --> create an entry in user.invite
+router.post('/api/invite/reject', friendAPI.reject)	//reject friend request --> delete the entry from notification
+router.post('/api/invite/accept', friendAPI.accept) 	// accept friend request --> delete entry from notification and add email to user.friends
 router.delete('/api/friend', friendAPI.unFriend)	// unfriend -->  delete email from user.friends
 router.get('/api/friend/all', friendAPI.getAllFriends)	// get all friends --> return user.friends
 router.get('/api/friend/recommend', friendAPI.getRecommendedFriends) //return users-friends

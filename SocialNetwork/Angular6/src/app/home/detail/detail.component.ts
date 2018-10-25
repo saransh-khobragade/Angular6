@@ -28,10 +28,11 @@ export class DetailComponent{
   }
 
   refreshRecommendedList(){
-    this.recommendedUser=[]
+    
     this.user.userDetails.subscribe(data=>{
       this.userDetails=data
       this.user.getRecommendedFriends(this.userDetails.email).subscribe(data=>{
+        this.recommendedUser=[]
         for(let a in data.body){
           this.recommendedUser.push(data.body[a])
         }

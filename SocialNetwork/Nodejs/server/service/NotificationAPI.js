@@ -4,7 +4,10 @@ const User = require('../model/Users')
 
 exports.inviteNotification =  async (req,res)=>{
     const email = req.query.email
-    let invites= await db.FindWithKeys(Notification,[{type:"invite"},{ "receiver.email": email}],"creater")   
+    if(email==="") res.json({success: false, message:'Got blank email for invites'})
+
+    let invites= await db.FindWithKeys(Notification,[{type:"invite"},{ "receiver.email": email}])   
+    console.log(invites)
     
     let result=[]
     for(let a of invites){

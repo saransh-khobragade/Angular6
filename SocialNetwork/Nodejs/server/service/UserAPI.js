@@ -19,7 +19,7 @@ exports.login = async (req,res)=>{		//login API
 				} 
 				req.session[email] = output._id
 				req.session.save()
-				console.log(req.session)
+				
 				res.json({success: true, message:'Login Success'})
 			})
 		}

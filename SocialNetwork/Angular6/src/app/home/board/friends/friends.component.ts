@@ -10,11 +10,15 @@ import { AuthService } from 'src/app/service/auth.service';
 export class FriendsComponent implements OnInit {
 
   inviteList=[]
+  friendList=[]
 
   constructor(private user:UserService,private auth:AuthService) { }
   
   ngOnInit() {
+    this.refreshList()    
+  }
 
+  refreshList(){
     this.auth.isUserExistsObservable.subscribe(data=>
       {
         if(data){
@@ -26,6 +30,16 @@ export class FriendsComponent implements OnInit {
                  this.inviteList.push(data.body[a])
               }
             })
+
+            this.user.getAllFriends(data.email).subscribe(data=>{
+              this.friendList=[]
+              for(let a in data.body){
+                this.friendList.push(data.body[a])
+              }
+              console.log(this.friendList)
+            })
+
+            
           })
         }
     
@@ -35,10 +49,15 @@ export class FriendsComponent implements OnInit {
   accept(friendEmail){
     
     this.user.userDetails.subscribe(data=>
-      {
-        
+      {        
         this.user.acceptInvite(data.email,friendEmail).subscribe(data=>{
-          console.log(data.body)
+          if(data.body.success)
+          {
+            this.refreshList() 
+          }
+          else{
+            alert(data.body.message)
+          }
         })
       })
     
@@ -48,9 +67,17 @@ export class FriendsComponent implements OnInit {
     this.user.userDetails.subscribe(data=>
       {
         this.user.rejectInvite(data.email,friendEmail).subscribe(data=>{
-          console.log(data.body)
+          if(data.body.success)
+          {
+            this.refreshList() 
+          }
+          else{
+            alert(data.body.message)
+          }
         })
       })
   }
+
+  
 
 }

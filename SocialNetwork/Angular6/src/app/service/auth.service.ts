@@ -58,7 +58,7 @@ export class AuthService {
   }
 
   isUser(username, password){
-    return this.http.post<isUser>('/api/login', { email: username, password }, { observe: 'response' }).pipe(
+    return this.http.post<isUser>('/api/auth/login', { email: username, password }, { observe: 'response' }).pipe(
       retry(0),
       catchError(this.handleError));
   }//used
@@ -66,11 +66,11 @@ export class AuthService {
   isUserExists(id:string){
     const params = new HttpParams();
     params.set('email', id);
-    return this.http.get<register>('/api/isUserExist',{ observe: 'response', params:{email:id}  });
+    return this.http.get<register>('/api/auth/isUserExist',{ observe: 'response', params:{email:id}  });
   }
 
   isUserLoggedIn(): Observable<isLoggedIn> {
-    return this.http.get<isLoggedIn>('/api/isUserLoggedIn')
+    return this.http.get<isLoggedIn>('/user/isUserLoggedIn')
   }
 
   getUserProfile(): Observable<profile> {
@@ -78,7 +78,7 @@ export class AuthService {
   }
 
   logout(username){
-    return this.http.delete('/api/logout',{params:{email:username}});
+    return this.http.delete('/auth/logout',{params:{email:username}});
   }
 
 

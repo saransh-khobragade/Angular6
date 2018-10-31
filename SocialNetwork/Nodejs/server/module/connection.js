@@ -6,7 +6,7 @@ conn.connect('mongodb://localhost:27017/Angular6', { useNewUrlParser: true })
 conn.set('useCreateIndexs', true);
 // When successfully connected
 conn.connection.on('connected', function () {  
-  console.log('Mongoose up');
+  console.log('MongoDb started :)');
   mongoose = true;
 });
 

@@ -84,18 +84,25 @@ router.post('/invite/accept', async (req, res) => {
 		Notification.find({$and:[{ type: 'invite'},{ "creater.email":friendEmail },{ "receiver.email":myEmail  }]},(err,re)=>{
 			if(re.length!=0){
 				notificationId=re[0]._id
-	
+				userName=re[0].receiver.name
+
 				User.find({email:friendEmail},(err,re)=>{
 					if(re[0].fname){
 						friendName=re[0].fname
 
 						Notification.findByIdAndDelete(notificationId,function(err,re){
 							if(re){
+
 								User.update({ email:myEmail }, { $push: { friends: {name:friendName,email:friendEmail} } },function(err,re){
 									if(re){
-										return res.json({ success: true, message: "Friend request accepted" })
+										User.update({ email:friendEmail }, { $push: { friends: {name:userName,email:myEmail} } },function(err,re){
+											if(re){
+												return res.json({ success: true, message: "Friend request accepted" })
+											}		
+											else return res.json({ success: false, message: "Accept : user not pushed to other's friendlist" })
+										})
 									}		
-									else return res.json({ success: false, message: "Accept : Issue with update" })
+									else return res.json({ success: false, message: "Accept : friend is not pushed to user friendlist" })
 								})
 							}
 							else return res.json({ success: false, message: "Accept : Issue with deletion of notification" })
@@ -148,43 +155,47 @@ router.get('/getAllFriends', async (req, res) => {
 	else return res.json({ success: false, message: 'get all friends: email did not recieved' })
 });
 
+router.delete('/unfriend',async (req, res) => {
+	const myEmail = req.query.myEmail
+	const friendEmail = req.query.friendEmail
 
-exports.unFriend = async (req, res) => {
-	const email = req.query.email
-	const friend = req.query.friend
-	if (email != friend && email != null && email != "" && friend != null && friend != "") {
-		User.findOne({ email }, function (err, user) {
-			if (err) {
-				return res.json({ success: false, message: 'Something went wrong' })
-			} else if (!user) {
-				return res.json({ success: false, message: 'Requester doesn\'t exist' })
-			} else if (user.friends.indexOf(friend) < 0) {
-				return res.json({ success: false, message: 'Friend doesn\'t exist' })
-			}
-			User.findOne({ email: friend }, function (err, fnd) {
-				if (err) {
-					return res.json({ success: false, message: 'Something went wrong' })
-				} else if (!fnd) {
-					return res.json({ success: false, message: 'Receiver doesn\'t exist' })
-				} else if (fnd.friends.indexOf(email) < 0) {
-					return res.json({ success: false, message: 'Friend doesn\'t exist' })
-				}
-				User.updateOne({ email }, { $pull: { friends: friend } }, function (err) {
-					if (err) {
-						return res.json({ success: false, message: 'Something went wrong' })
+	if(myEmail && friendEmail){
+		User.find({ email:myEmail },(err,re)=>{
+			if(re[0].friends.length!==0){
+
+				userDetail={name:re[0].fname,email:re[0].email};
+				let flag=false
+
+				for(usr of re[0].friends){
+					if(usr.email===friendEmail){
+						friendDetails=usr
+						flag=true
+						break
 					}
-					User.updateOne({ email: friend }, { $pull: { friends: email } }, function (err) {
-						if (err) {
-							return res.json({ success: false, message: 'Something went wrong' })
+				}
+				
+				if(flag){					
+					User.updateOne({ email:myEmail }, { $pull: { friends: friendDetails } },(err,re)=> {
+						if (re) {
+							User.updateOne({ email: friendEmail }, { $pull: { friends: userDetail } },(err,re)=> {
+								if (re) {
+									return res.json({ success: true, message: 'Unfriend successful' })
+								}
+								else return res.json({ success: false, message: 'user did not removed from friend friendlist' })
+
+							})
 						}
+						else return res.json({ success: false, message: 'friend did not removed from friendlist' })
 					})
-					return res.json({ success: true, message: 'Unfriend successfully' })
-				})
-			})
+				}
+				else return res.json({ success: false, message: 'unfriend: friend is not in list' })
+				
+			}
+			else return res.json({ success: false, message: 'unfriend: user has no friends' })
 		})
-	} else
-		return res.json({ success: false, message: 'Invalid scenario' })
-};
+	}
+	else return res.json({ success: false, message: 'unfriend: emails did not recieved' })
+});
 
 
 module.exports = router;

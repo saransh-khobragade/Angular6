@@ -7,6 +7,8 @@ POST http://localhost:1234/api/friend/invite/send
     }   
 GET http://localhost:1234/api/notification/getInvites?email=gupta@gmail.com
 
+GET http://localhost:1234/api/friend/getAllFriends?email=gupta@gmail.com
+
 POST http://localhost:1234/api/friend/invite/accept
     {
         "myEmail":"gupta@gmail.com",
@@ -18,6 +20,8 @@ POST http://localhost:1234/api/friend/invite/reject
         "myEmail":"gupta@gmail.com",
         "friendEmail":"saransh98@gmail.com"
     }
+
+DELETE http://localhost:1234/api/friend/unfriend?myEmail=saransh98@gmail.com&friendEmail=gupta@gmail.com
 
 
 

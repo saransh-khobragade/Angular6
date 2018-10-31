@@ -2,8 +2,19 @@ const User = require('../model/Users')
 const express = require('express')
 const router = express.Router();
 
+router.get('/getOneUser', async (req, res)=>{			// get user with id
+	User.findOne({email:req.query.email}, function (err, user) {
+		if(err) {
+			return res.json({success: false, message: 'Something went wrong'})
+		}
+		else if(!user){
+			return res.json({success: false, message: 'User not found'})
+		}
+		return res.json(user)		
+	}).select('fname lname email phone gender dob')
+});
 
-router.post('/api/user',async (req, res) =>{		
+/* router.post('/api/user',async (req, res) =>{		
 	const{fname, lname, email, password, phone, gender, dob} = req.body
 	const result = await User.findOne({email})
     if(result){
@@ -17,7 +28,8 @@ router.post('/api/user',async (req, res) =>{
         }  
         return res.json({success: true, message:'Registration successful'})  
     })
-});
+}); */
+
 
 
 /* exports.login = async (req,res)=>{		//login API

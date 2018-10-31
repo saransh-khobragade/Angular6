@@ -29,6 +29,7 @@ export class FriendsComponent implements OnInit {
               for(let a in data.body){
                  this.inviteList.push(data.body[a])
               }
+              
             })
 
             this.user.getAllFriends(data.email).subscribe(data=>{

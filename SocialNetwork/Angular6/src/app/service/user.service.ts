@@ -45,7 +45,7 @@ export class UserService {
     getUser(username){
         const options = username ?
         { params: new HttpParams().set('email', username) } : {};
-        return this.http.get<user>('/api/user/',options);
+        return this.http.get<user>('/api/user/getOneUser',options);
       }
 
     getRecommendedFriends(email){
@@ -54,11 +54,11 @@ export class UserService {
 
 
     getAllInvites(email){
-        return this.http.get('/api/notification/getinvites',{ observe: 'response', params:{email:email}  });
+        return this.http.get('/api/notification/getInvites',{ observe: 'response', params:{email:email}  });
     }
 
     sendInvite(myEmail,friendEmail){
-        return this.http.post<res>('/api/invite/send', {myEmail,friendEmail}, { observe: 'response' });
+        return this.http.post<res>('/api/friend/invite/send', {myEmail,friendEmail}, { observe: 'response' });
     }
 
     acceptInvite(sender,reciever){
@@ -70,7 +70,7 @@ export class UserService {
     }
 
     getAllFriends(email){
-        return this.http.get<res>('/api/friend/getAll',{ observe: 'response', params:{email:email}  });
+        return this.http.get<res>('/api/friend/getAllFriends',{ observe: 'response', params:{email:email}  });
     }
 
 

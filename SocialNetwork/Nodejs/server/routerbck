@@ -1,10 +1,4 @@
-const userAPI = require('../service/UserAPI')
-const adminAPI = require('../service/AdminAPI')
-const notificationAPI = require('../service/NotificationAPI')
-const friendAPI = require('../service/FriendAPI')
-const upload = require('../module/Uploads')
-const express = require('express')
-var router = express.Router();
+
 
 router.post('/api/login',userAPI.login)	//log in user
 router.get('/api/isUserLoggedIn', userAPI.isUserLoggedIn) //checking logged in user

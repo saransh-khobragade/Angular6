@@ -1,24 +1,28 @@
-const User = require('../model/Users')
 const express = require('express')
 const router = express.Router();
 
-
-/* const Notification = require('../model/Notification')
-const db = require('../module/MongoDBMethods')
 const User = require('../model/Users')
+const Notification = require('../model/Notification')
 
-exports.inviteNotification =  async (req,res)=>{
+router.get('/getInvites',async (req,res)=>{
     const email = req.query.email
-    if(email==="") res.json({success: false, message:'Got blank email for invites'})
 
-    let invites= await db.FindWithKeys(Notification,[{type:"invite"},{ "receiver.email": email}])   
-    console.log(invites)
-    
-    let result=[]
-    for(let a of invites){
-        result.push(a.creater)
-    };
-    res.json(result)
-}; */
+    if(!email){
+        return res.json({success: false, message:'Got blank email for invites'})
+    }
+    else{
+        Notification.find({$and:[{type:"invite"},{ "receiver.email": email}]},(err,re)=>{
+            if(re.length!==0){
+                
+                let result=[]
+                for(let a of re){
+                    result.push(a.creater)
+                };
+                return res.json(result)
+            }
+            else return res.json({success: false, message:'notification : empty notification'})
+        }).select("creater")
+    }    
+});
 
 module.exports = router;

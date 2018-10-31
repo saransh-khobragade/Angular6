@@ -1,75 +1,152 @@
 const User = require('../model/Users')
 const express = require('express')
 const router = express.Router();
-
-
-/* const User = require('../model/Users')
-const db = require('../module/MongoDBMethods')
 const Notification = require('../model/Notification')
 
-function filterUser(data, data2) {
-	var filter = [];
-	for (var i = 0; i < data.length; i++) {
-		if (data2.indexOf(data[i].email) < 0)
-			filter.push(data[i]);
+router.get('/recommend',async (req, res) => {
+	const email = req.query.email
+	recommendedList=[]
+	console.log(email)
+	if(email){
+		User.find(function(err,allUser){
+			if(allUser){
+				User.find({email:email},function(err,currUser){
+					if(currUser){
+						Notification.find({"creater.email":email},function(err,noti){
+							if(noti){
+								for(usr of allUser){
+									let flag=true
+									for(usr2 of currUser[0].friends){
+										if(usr.email===usr2.email) flag=false
+									}
+									for(usr3 of noti){
+										if(usr.email===usr3.receiver.email) flag=false
+									}
+									if(flag && usr.email!==email) {
+										recommendedList.push({name:usr.fname,email:usr.email})
+									}
+								}
+								return res.json(recommendedList)
+							}
+							else return res.json({ success: false, message: 'recommended : notification list not found' })
+						}).select("receiver.email")
+					}
+					else return res.json({ success: false, message: 'recommended : current user not found' })
+				})
+			}
+			else return res.json({ success: false, message: 'recommended : issue with geting all user' })
+		}).select("fname email")
 	}
-	return filter;
-}
+	else return res.json({ success: false, message: 'recommended : invalid email' })	
+});
 
-
-exports.invite = async (req, res) => {
+router.post('/invite/send',async (req, res) => {
 	const { myEmail, friendEmail } = req.body
-	const noti=await db.FindWithKeys(Notification,[{ type: 'invite'},{ "creater.email": myEmail},{ "receiver.email": friendEmail }])
 	
-	if(noti.length!==0) return res.json({ success: false, message: 'Request Already sent' })
+	Notification.find({ type: 'invite'},{ "creater.email": myEmail},{ "receiver.email": friendEmail },(err,re)=>{
+		if(re.length!==0)	return res.json({ success: false, message: 'invite send :  Request Already sent' })
+		else{
+			User.find({email:myEmail},(err,re)=>{
+				if(re[0].fname){
+					userName=re[0].fname;
 
-	const myName=await db.FindWithKeys(User,[{email:myEmail}],"fname")
-	const FriendName=await db.FindWithKeys(User,[{email:friendEmail}],"fname")
-	const entry = new Notification({ 
-		type: 'invite',
-		creater: { name:myName[0].fname, email:myEmail},
-		receiver:{ name:FriendName[0].fname , email:friendEmail}
-	})
+					User.find({email:friendEmail},(err,re)=>{
+						if(re[0].fname){
+							friendName=re[0].fname;
 
-	entry.save(function (err) {
-		if(!err) return res.json({ success: true, message: 'invitation sent' })
-	})
-};
+							const entry = new Notification({ 
+								type: 'invite',
+								creater: { name:userName, email:myEmail},
+								receiver:{ name:friendName , email:friendEmail}
+							})
 
-exports.accept = async (req, res) => {
-	const { myEmail, friendEmail } = req.body
-	const noti=await db.FindWithKeys(Notification,[{ type: 'invite'},{ "creater.email":friendEmail },{ "receiver.email":myEmail  }])
-	const friendName=await db.FindWithKeys(User,[{email:friendEmail}],"fname")
-
-	if(noti.length!==0 ){
-		if(friendName.length!==0){
-			Notification.findByIdAndDelete(noti[0]._id,function(err,re){
-				if(!err){
-					User.update({ email:myEmail }, { $push: { friends: {name:friendName[0].fname,email:friendEmail} } },function(err,re){
-						if(!err){
-							return res.json({ success: true, message: "Friend request accepted" })
-						}		
-						else return res.json({ success: false, message: "Accept : Issue with update" })
-					})
+							entry.save(function (err,re) {
+								if(re){
+									//console.log(re)
+									return res.json({ success: true, message: 'invitation sent' })
+								}
+								else return res.json({ success: false, message: 'invite send : invite notification failed' })
+							})
+						}
+						else return res.json({ success: false, message: 'invite send : friend email not found' }) 
+					}).select("fname")
 				}
-				else return res.json({ success: false, message: "Accept : Issue with deletion of notification" })
-			})
+				else return res.json({ success: false, message: 'invite send : user email not found' })
+			}).select("fname")
 		}
-		else return res.json({ success: false, message: "Accept : friend name  not found" })
-	}
-	else return res.json({ success: false, message: "Accept : notification  not found" })
-	
-};
+	})
+});
 
-exports.reject = async (req, res) => {
+router.post('/invite/accept', async (req, res) => {
 	const { myEmail, friendEmail } = req.body
-	const noti=await db.FindWithKeys(Notification,[{ type: 'invite'},{ "creater.email":myEmail },{ "receiver.email":friendEmail  }])
 
-	Notification.findByIdAndDelete(noti[0]._id,function(err,re){})
+	if(myEmail && friendEmail){
+		Notification.find({$and:[{ type: 'invite'},{ "creater.email":friendEmail },{ "receiver.email":myEmail  }]},(err,re)=>{
+			if(re.length!=0){
+				notificationId=re[0]._id
+	
+				User.find({email:friendEmail},(err,re)=>{
+					if(re[0].fname){
+						friendName=re[0].fname
 
-	return res.json({ success: true, message: 'Friend request Rejected' })
-};
+						Notification.findByIdAndDelete(notificationId,function(err,re){
+							if(re){
+								User.update({ email:myEmail }, { $push: { friends: {name:friendName,email:friendEmail} } },function(err,re){
+									if(re){
+										return res.json({ success: true, message: "Friend request accepted" })
+									}		
+									else return res.json({ success: false, message: "Accept : Issue with update" })
+								})
+							}
+							else return res.json({ success: false, message: "Accept : Issue with deletion of notification" })
+						})
+					}
+					else return res.json({ success: false, message: "Accept : no creater found of notification" })
+				}).select("fname")
+			}
+			else return res.json({ success: false, message: "Accept : no notification found" })
+		})
+	}
+	else return res.json({ success: false, message: "Accept : emails  not recieved" })
+	
+});
 
+router.post('/invite/reject',async (req, res) => {
+	const { myEmail, friendEmail } = req.body
+
+	if(myEmail && friendEmail){
+		Notification.find({$and:[{ type: 'invite'},{ "creater.email":friendEmail },{ "receiver.email":myEmail  }]},(err,re)=>{
+			if(re.length!=0){
+				notificationId=re[0]._id
+
+				Notification.findByIdAndDelete(notificationId,function(err,re){
+					if(re){
+						return res.json({ success: true, message: "Request rejected" })
+					}
+					else return res.json({ success: false, message: "Reject : Issue with deletion of notification" })
+				})
+
+
+			}
+			else return res.json({ success: false, message: 'Reject : no notification found' })
+		})
+	}
+	else return res.json({ success: false, message: 'Reject : emails  not recieved' })	
+});
+
+
+router.get('/getAllFriends', async (req, res) => {
+	const email = req.query.email
+	if(email){
+		User.find({email:email},function(err,re){
+			if(re){
+				return res.json(re[0].friends)
+			}
+			else return res.json({ success: false, message: 'get all friends:  email not found' })
+		})
+	}
+	else return res.json({ success: false, message: 'get all friends: email did not recieved' })
+});
 
 
 exports.unFriend = async (req, res) => {
@@ -109,59 +186,5 @@ exports.unFriend = async (req, res) => {
 		return res.json({ success: false, message: 'Invalid scenario' })
 };
 
-exports.getAllFriends = async (req, res) => {
-	const email = req.query.email
-	if(email!==""){
-		User.find({email:email},function(err,re){
-			if(re){
-				return res.json(re[0].friends)
-			}
-			else return res.json({ success: false, message: 'get all friends:  email not found' })
-		})
-	}
-	else return res.json({ success: false, message: 'get all friends: wrong email' })
-};
 
-//http://localhost:1234/api/friend/recommend?email=saransh98@gmail.com
-exports.getRecommendedFriends = async (req, res) => {
-	const email = req.query.email
-	recommendedList=[]
-
-	if(email!==""){
-		User.find(function(err,allUser){
-			if(allUser){
-				User.find({email:email},function(err,currUser){
-					if(currUser){
-						Notification.find({"creater.email":email},function(err,noti){
-							if(noti){
-								for(usr of allUser){
-									let flag=true
-									for(usr2 of currUser[0].friends){
-										if(usr.email===usr2.email) flag=false
-									}
-									for(usr3 of noti){
-										if(usr.email===usr3.receiver.email) flag=false
-									}
-									if(flag && usr.email!==email) {
-										recommendedList.push({name:usr.fname,email:usr.email})
-									}
-								}
-								return res.json(recommendedList)
-							}
-							else return res.json({ success: false, message: 'recommended : notification list not found' })
-						}).select("receiver.email")
-					}
-					else return res.json({ success: false, message: 'recommended : current user not found' })
-				})
-			}
-			else return res.json({ success: false, message: 'recommended : issue with geting all user' })
-		}).select("fname email")
-	}
-	else return res.json({ success: false, message: 'recommended : invalid email' })
-
-
-
-	
-}
- */
 module.exports = router;

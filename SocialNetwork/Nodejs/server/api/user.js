@@ -19,6 +19,7 @@ router.post('/api/user',async (req, res) =>{
     })
 });
 
+
 /* exports.login = async (req,res)=>{		//login API
     const{email,password}=req.body
 	User.findOne({email},(function (err, result) {

@@ -13,7 +13,8 @@ interface user {
   }
 interface res{
     success:boolean,
-    message:string
+    message:string,
+    result:any
 }
 
 
@@ -54,7 +55,7 @@ export class UserService {
 
 
     getAllInvites(email){
-        return this.http.get('/api/notification/getInvites',{ observe: 'response', params:{email:email}  });
+        return this.http.get<res>('/api/notification/getInvites',{ observe: 'response', params:{email:email}  });
     }
 
     sendInvite(myEmail,friendEmail){
@@ -62,11 +63,11 @@ export class UserService {
     }
 
     acceptInvite(sender,reciever){
-        return this.http.post<res>('/api/invite/accept', {myEmail:sender,friendEmail:reciever}, { observe: 'response' });
+        return this.http.post<res>('/api/friend/invite/accept', {myEmail:sender,friendEmail:reciever}, { observe: 'response' });
     }
 
     rejectInvite(sender,reciever){
-        return this.http.post<res>('/api/invite/reject', {myEmail:sender,friendEmail:reciever}, { observe: 'response' });
+        return this.http.post<res>('/api/friend/invite/reject', {myEmail:sender,friendEmail:reciever}, { observe: 'response' });
     }
 
     getAllFriends(email){

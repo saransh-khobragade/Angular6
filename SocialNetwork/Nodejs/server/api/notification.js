@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router();
 
-const User = require('../model/Users')
 const Notification = require('../model/Notification')
 
 router.get('/getInvites',async (req,res)=>{
@@ -18,7 +17,7 @@ router.get('/getInvites',async (req,res)=>{
                 for(let a of re){
                     result.push(a.creater)
                 };
-                return res.json(result)
+                return res.json({success: false, result:result})
             }
             else return res.json({success: false, message:'notification : empty notification'})
         }).select("creater")

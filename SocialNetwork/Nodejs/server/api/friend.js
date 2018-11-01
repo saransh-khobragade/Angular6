@@ -6,13 +6,13 @@ const Notification = require('../model/Notification')
 router.get('/recommend',async (req, res) => {
 	const email = req.query.email
 	recommendedList=[]
-	console.log(email)
+
 	if(email){
 		User.find(function(err,allUser){
 			if(allUser){
 				User.find({email:email},function(err,currUser){
 					if(currUser){
-						Notification.find({"creater.email":email},function(err,noti){
+						Notification.find({$or:[{"creater.email":email},{"receiver.email":email}]},function(err,noti){
 							if(noti){
 								for(usr of allUser){
 									let flag=true
@@ -20,7 +20,7 @@ router.get('/recommend',async (req, res) => {
 										if(usr.email===usr2.email) flag=false
 									}
 									for(usr3 of noti){
-										if(usr.email===usr3.receiver.email) flag=false
+										if(usr.email===usr3.receiver.email || usr.email===usr3.creater.email) flag=false
 									}
 									if(flag && usr.email!==email) {
 										recommendedList.push({name:usr.fname,email:usr.email})
@@ -29,7 +29,7 @@ router.get('/recommend',async (req, res) => {
 								return res.json(recommendedList)
 							}
 							else return res.json({ success: false, message: 'recommended : notification list not found' })
-						}).select("receiver.email")
+						})
 					}
 					else return res.json({ success: false, message: 'recommended : current user not found' })
 				})

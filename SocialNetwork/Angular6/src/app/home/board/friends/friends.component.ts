@@ -21,15 +21,18 @@ export class FriendsComponent implements OnInit {
   refreshList(){
     this.auth.isUserExistsObservable.subscribe(data=>
       {
+        
         if(data){
           this.user.userDetails.subscribe(data=>
           {
             this.user.getAllInvites(data.email).subscribe(data=>{
               this.inviteList=[]
-              for(let a in data.body){
-                 this.inviteList.push(data.body[a])
-              }
-              
+              if(data.body.result){
+                for(let a in data.body.result){
+                  this.inviteList.push(data.body.result[a])
+               }
+              }             
+
             })
 
             this.user.getAllFriends(data.email).subscribe(data=>{
@@ -37,10 +40,8 @@ export class FriendsComponent implements OnInit {
               for(let a in data.body){
                 this.friendList.push(data.body[a])
               }
-              console.log(this.friendList)
-            })
-
-            
+              
+            })            
           })
         }
     

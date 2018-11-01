@@ -80,6 +80,17 @@ export class FriendsComponent implements OnInit {
       })
   }
 
+  unfriend(friendEmail){
+    this.user.userDetails.subscribe(data=>
+      {
+        this.user.unfriend(data.email,friendEmail).subscribe(data=>{
+          if(data.body.success){
+            this.refreshList()
+          }
+        })
+      })
+  }
+
   
 
 }

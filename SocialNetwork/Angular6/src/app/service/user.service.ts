@@ -74,6 +74,10 @@ export class UserService {
         return this.http.get<res>('/api/friend/getAllFriends',{ observe: 'response', params:{email:email}  });
     }
 
+    unfriend(UserEmail,friendEmail){
+        return this.http.delete<res>('/api/friend/unfriend',{ observe: 'response', params:{myEmail:UserEmail,friendEmail:friendEmail}  });
+    }
+
 
 
 

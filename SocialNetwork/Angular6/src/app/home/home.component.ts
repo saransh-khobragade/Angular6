@@ -1,5 +1,5 @@
 import { Directive,Component, OnInit, Input } from '@angular/core';
-import { AuthService } from '../service/auth.service';
+import { UserService } from '../service/user.service';
 
 @Component({
   selector: 'app-home',
@@ -10,11 +10,15 @@ export class HomeComponent implements OnInit {
 
   userAlive:boolean
 
-  constructor(private auth:AuthService) {
-
+  constructor(private user:UserService) {
     this.userAlive=false
-    this.auth.isUserExistsObservable.subscribe( data=> this.userAlive=data)
-  }
+    this.user.userDetails.subscribe( data=>{
+      if(data){
+        this.userAlive=true
+      }
+      else this.userAlive=false
+    })
+   }
 
   ngOnInit() {
     

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../service/auth.service';
-import { Router } from '@angular/router';
 import { UserService } from '../../service/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -11,19 +11,27 @@ import { UserService } from '../../service/user.service';
 export class HeaderComponent implements OnInit {
 
   username:string
+  useremail:string
   userAlive:boolean
 
-  constructor(private auth:AuthService,private router:Router,private user:UserService) {
-
-  }
+  constructor(private user:UserService,private auth:AuthService,private router:Router) {
+    this.userAlive=false
+    this.user.userDetails.subscribe( data=>{
+      if(data){
+        console.log(data)
+        this.userAlive=true
+        this.username=data.fname
+        this.useremail=data.email
+      }
+      else this.userAlive=false
+    })
+   }
 
   ngOnInit() {
 
-    this.auth.isUserExistsObservable.subscribe(data=>
+    this.user.userDetails.subscribe(data=>
       {
-        this.userAlive=data
-        if(data){
-          
+        if(data){     
           this.user.userDetails.subscribe(data=>
           {
             this.username=data.fname
@@ -34,12 +42,13 @@ export class HeaderComponent implements OnInit {
   }
 
   logout(){
-    this.auth.logout(this.username).subscribe(data=>{
-      if(data){
+    this.auth.logout(this.useremail).subscribe(data=>{
+      if(data.success){
+        sessionStorage.setItem("user",null)
+        this.user.setUserDetails(null)
         this.router.navigate(['login']);
-        this.auth.userAlive(false)
       }
-
+      else alert(data.message)
     })
   }
 }

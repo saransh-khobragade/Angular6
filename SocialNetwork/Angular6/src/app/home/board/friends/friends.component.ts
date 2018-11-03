@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/service/user.service';
-import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
   selector: 'app-friends',
@@ -9,88 +8,77 @@ import { AuthService } from 'src/app/service/auth.service';
 })
 export class FriendsComponent implements OnInit {
 
-  inviteList=[]
-  friendList=[]
+  inviteList = []
+  friendList = []
 
-  constructor(private user:UserService,private auth:AuthService) { }
-  
+  constructor(private user: UserService) { }
+
   ngOnInit() {
-    this.refreshList()    
+    this.refreshList()
   }
 
-  refreshList(){
-    this.auth.isUserExistsObservable.subscribe(data=>
-      {
-        
-        if(data){
-          this.user.userDetails.subscribe(data=>
-          {
-            this.user.getAllInvites(data.email).subscribe(data=>{
-              this.inviteList=[]
-              if(data.body.result){
-                for(let a in data.body.result){
-                  this.inviteList.push(data.body.result[a])
-               }
-              }             
-
-            })
-
-            this.user.getAllFriends(data.email).subscribe(data=>{
-              this.friendList=[]
-              for(let a in data.body){
-                this.friendList.push(data.body[a])
-              }
-              
-            })            
-          })
+  refreshList() {
+    this.user.userDetails.subscribe(data => {
+      this.user.getAllInvites(data.email).subscribe(data => {
+        this.inviteList = []
+        if (data.body.result) {
+          for (let a in data.body.result) {
+            this.inviteList.push(data.body.result[a])
+          }
         }
-    
+
       })
+
+      this.user.getAllFriends(data.email).subscribe(data => {
+        this.friendList = []
+        for (let a in data.body) {
+          this.friendList.push(data.body[a])
+        }
+
+      })
+    })
   }
 
-  accept(friendEmail){
-    
-    this.user.userDetails.subscribe(data=>
-      {        
-        this.user.acceptInvite(data.email,friendEmail).subscribe(data=>{
-          if(data.body.success)
-          {
-            this.refreshList() 
-          }
-          else{
-            alert(data.body.message)
-          }
-        })
+
+
+
+  accept(friendEmail) {
+    this.user.userDetails.subscribe(data => {
+      this.user.acceptInvite(data.email, friendEmail).subscribe(data => {
+        if (data.body.success) {
+          this.refreshList()
+        }
+        else {
+          alert(data.body.message)
+        }
       })
-    
+    })
+
   }
 
-  reject(friendEmail){
-    this.user.userDetails.subscribe(data=>
-      {
-        this.user.rejectInvite(data.email,friendEmail).subscribe(data=>{
-          if(data.body.success)
-          {
-            this.refreshList() 
-          }
-          else{
-            alert(data.body.message)
-          }
-        })
+  reject(friendEmail) {
+    this.user.userDetails.subscribe(data => {
+      this.user.rejectInvite(data.email, friendEmail).subscribe(data => {
+        if (data.body.success) {
+          this.refreshList()
+        }
+        else {
+          alert(data.body.message)
+        }
       })
+    })
   }
 
-  unfriend(friendEmail){
-    this.user.userDetails.subscribe(data=>
-      {
-        this.user.unfriend(data.email,friendEmail).subscribe(data=>{
-          if(data.body.success){
-            this.refreshList()
-          }
-        })
+  unfriend(friendEmail) {
+    this.user.userDetails.subscribe(data => {
+      this.user.unfriend(data.email, friendEmail).subscribe(data => {
+        if (data.body.success) {
+          this.refreshList()
+        }
       })
+    })
   }
 
-  
+
 
 }

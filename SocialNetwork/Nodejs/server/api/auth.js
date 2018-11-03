@@ -31,16 +31,27 @@ router.post('/login', async (req,res)=>{		//login API
 			}
 		}))  
 	}
-	
 })
 
 router.delete('/logout',async (req,res)=>{
-	delete req.session[req.query.email]
-	return res.json({success:true})
+	const email = req.query.email	
+	if(email){
+		if(req.session[email]!==undefined){
+			delete req.session[req.query.email]
+			return res.json({success:true,message:"user session deleted"})
+		}
+		else{
+			return res.json({success:false,message:"user session not found"})
+		}
+	}
+	else return res.json({success:false,message:"email send is not valid"})
 });
 
 router.get('/isUserLoggedIn', async (req,res)=>{
-	return res.json({status: req.session[req.query.email]? true : false })
+	if(req.query.email){
+		return res.json({status: req.session[req.query.email]? true : false })
+	}
+	else return res.json({status:false })
 });
 
 module.exports = router;

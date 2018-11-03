@@ -3,15 +3,18 @@ const express = require('express')
 const router = express.Router();
 
 router.get('/getOneUser', async (req, res)=>{			// get user with id
-	User.findOne({email:req.query.email}, function (err, user) {
-		if(err) {
-			return res.json({success: false, message: 'Something went wrong'})
-		}
-		else if(!user){
-			return res.json({success: false, message: 'User not found'})
-		}
-		return res.json(user)		
-	}).select('fname lname email phone gender dob')
+	if(req.query.email){
+		User.findOne({email:req.query.email}, function (err, user) {
+			if(err) {
+				return res.json({success: false, message: 'Something went wrong'})
+			}
+			else if(!user){
+				return res.json({success: false, message: 'User not found'})
+			}
+			return res.json({success: true, result: user})		
+		}).select('fname lname email phone gender dob')
+	}
+	else return res.json({success: false, message: 'email did not recieved'})
 });
 
 /* router.post('/api/user',async (req, res) =>{		

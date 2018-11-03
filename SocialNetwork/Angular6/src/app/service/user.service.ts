@@ -27,11 +27,19 @@ export class UserService {
     private user = new ReplaySubject<user>();
     userDetails = this.user.asObservable();
     
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        if(sessionStorage.getItem("user")!==null){
+            this.getUser(sessionStorage.getItem("user")).subscribe(data=>{    
+             if(data.success){
+                this.setUserDetails(data.result)
+             }
+            })
+        }  
+     }
 
     setUserDetails(user:user){
         this.user.next(user)
-      }
+    }
 
     signUpUser(fname,lname, email, password, phone, gender, dob) {
         return this.http.post<user>('/api/user', {fname,lname, email, password, phone, gender, dob }, { observe: 'response' });
@@ -46,7 +54,7 @@ export class UserService {
     getUser(username){
         const options = username ?
         { params: new HttpParams().set('email', username) } : {};
-        return this.http.get<user>('/api/user/getOneUser',options);
+        return this.http.get<res>('/api/user/getOneUser',options);
       }
 
     getRecommendedFriends(email){

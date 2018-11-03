@@ -42,27 +42,22 @@ export class ProfileComponent {
   }
 
   fetchUserData() {
-    this.auth.isUserExistsObservable.subscribe(data => {
+    this.user.userDetails.subscribe(data => {
+      this.userDetails = data
 
-      if (data) {
-
-        this.user.userDetails.subscribe(data => {
-          this.userDetails = data
-
-          this.myForm.setValue({
-            firstname: data.fname,
-            lastname: data.lname,
-            password: "",
-            confirmPassword: "",
-            email: data.email,
-            number: data.phone,
-            birthday: data.dob,
-            gender: data.gender[0].toUpperCase() + data.gender.slice(1).toLocaleLowerCase()
-          })
-        })
-      }
+      this.myForm.setValue({
+        firstname: data.fname,
+        lastname: data.lname,
+        password: "",
+        confirmPassword: "",
+        email: data.email,
+        number: data.phone,
+        birthday: data.dob,
+        gender: data.gender[0].toUpperCase() + data.gender.slice(1).toLocaleLowerCase()
+      })
     })
   }
+
 
   confirmPassValidator(control: FormGroup): null | { invalid: boolean } {
 
@@ -98,15 +93,15 @@ export class ProfileComponent {
   update(form) {
     this.user.updateUser(this.myForm.value.firstname, this.myForm.value.lastname, this.myForm.value.email, this.myForm.value.password, this.myForm.value.number, this.myForm.value.gender, this.myForm.value.birthday)
       .subscribe(res => {
-        
-              if(res.body.success){
-                console.log("data updated")
-                this.user.getUser(this.userDetails.email).subscribe(data=>{
-                  this.user.setUserDetails(data)
-                })
-                this.isSave = !this.isSave
-              }
-                
+
+        if (res.body.success) {
+          console.log("data updated")
+          this.user.getUser(this.userDetails.email).subscribe(data => {
+            this.user.setUserDetails(data)
+          })
+          this.isSave = !this.isSave
+        }
+
       })
 
   }

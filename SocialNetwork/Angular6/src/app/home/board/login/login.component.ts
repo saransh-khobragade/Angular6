@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
   //username="saransh98@gmail.com";
   //password="Password";
 
-  constructor(private Auth:AuthService,private router:Router,private user:UserService) { 
+  constructor(private auth:AuthService,private router:Router,private user:UserService) { 
     
   }
 
@@ -29,30 +29,25 @@ export class LoginComponent implements OnInit {
     const password = target.querySelector('#password').value;
 
 
-    this.Auth.isUser(username,password).subscribe(res=>{
-      
-      if(res.status==200){
-        if(res.body.success){
-          this.Auth.userAlive(true);
-          sessionStorage.setItem("user",username);
+    this.auth.login(username,password).subscribe(res=>{  
+      if(res.status==200 && res.body.success){
+        this.auth.isUserExists(username).subscribe(res=>{
+          if(res.body.status){
+            sessionStorage.setItem("user",null)
+            sessionStorage.setItem("user",username)
 
-          this.user.getUser(username).subscribe(data=>{
-            this.user.setUserDetails(data)
-          })
-          this.router.navigate(['home']);
-        }
-        else{
-          alert(res.body.message)
-        }
-        
-      }
-      else
-      {
-        alert("Api call failed");
-      }
-    });
+            this.user.getUser(username).subscribe(res=>{
+              if(res.success)
+              this.user.setUserDetails(res.result)
+            })
 
+            this.router.navigate(['home']);
+          }
+          else alert('user session doesnt exist in backend')
+        })
+
+      }
+      else alert('login failed')
+    })
   }
-
-
 }

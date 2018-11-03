@@ -48,7 +48,7 @@ import { MessagesComponent } from './home/board/messages/messages.component';
        [
       {
          path: 'login',
-        component: LoginComponent,
+        component: LoginComponent
       },
       {
         path: 'profile',
@@ -81,7 +81,8 @@ import { MessagesComponent } from './home/board/messages/messages.component';
       },
       {
         path: '**',
-        component:LoginComponent
+        component:LoginComponent,
+        canActivate:[AuthGuard]
       }
     ] 
   

@@ -6,7 +6,7 @@ const Notification = require('../model/Notification')
 router.get('/recommend',async (req, res) => {
 	const email = req.query.email
 	recommendedList=[]
-
+	
 	if(email){
 		User.find(function(err,allUser){
 			if(allUser){

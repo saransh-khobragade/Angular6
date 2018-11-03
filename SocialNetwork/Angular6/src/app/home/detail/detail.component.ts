@@ -31,12 +31,14 @@ export class DetailComponent{
     
     this.user.userDetails.subscribe(data=>{
       this.userDetails=data
-      this.user.getRecommendedFriends(this.userDetails.email).subscribe(data=>{
-        this.recommendedUser=[]
-        for(let a in data.body){
-          this.recommendedUser.push(data.body[a])
-        }
-      })
+      if(this.userDetails.email){
+        this.user.getRecommendedFriends(this.userDetails.email).subscribe(data=>{
+          this.recommendedUser=[]
+          for(let a in data.body){
+            this.recommendedUser.push(data.body[a])
+          }
+        })
+      }     
      
     });
   }

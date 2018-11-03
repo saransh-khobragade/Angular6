@@ -20,45 +20,23 @@ interface isLoggedIn {
   status: boolean
 }
 
-interface isUser {
-  status: number,
+interface res{
   success: boolean,
-  message:string
+  message:string,
+  status:boolean
 }
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService {  
 
-  private user = new ReplaySubject<boolean>();
-  isUserExistsObservable = this.user.asObservable();
-  
-
-  constructor(private http: HttpClient,private userservice:UserService) { 
-    
-    if(sessionStorage.getItem("user")!==null){
-      this.userservice.getUser(sessionStorage.getItem("user")).subscribe(data=>{
-        
-        this.isUserExists(data.email).subscribe(data2=>{
-          if(data2.body.success)
-          {
-            this.userAlive(true)
-            this.userservice.setUserDetails(data)
-          }
-        })
-      })
-    }
-    this.userAlive(false)
+  constructor(private http: HttpClient) { 
   }
 
-  userAlive(value:boolean){
-    this.user.next(value)
-  }
-
-  isUser(username, password){
-    return this.http.post<isUser>('/api/auth/login', { email: username, password }, { observe: 'response' }).pipe(
+  login(username, password){
+    return this.http.post<res>('/api/auth/login', { email: username, password }, { observe: 'response' }).pipe(
       retry(0),
       catchError(this.handleError));
   }//used
@@ -66,19 +44,11 @@ export class AuthService {
   isUserExists(id:string){
     const params = new HttpParams();
     params.set('email', id);
-    return this.http.get<register>('/api/auth/isUserLoggedIn',{ observe: 'response', params:{email:id}  });
-  }
-
-  isUserLoggedIn(): Observable<isLoggedIn> {
-    return this.http.get<isLoggedIn>('/user/isUserLoggedIn')
-  }
-
-  getUserProfile(): Observable<profile> {
-    return this.http.get<profile>('/api/profile')
+    return this.http.get<res>('/api/auth/isUserLoggedIn',{ observe: 'response', params:{email:id}  });
   }
 
   logout(username){
-    return this.http.delete('/auth/logout',{params:{email:username}});
+    return this.http.delete<res>('api/auth/logout',{params:{email:username}});
   }
 
 

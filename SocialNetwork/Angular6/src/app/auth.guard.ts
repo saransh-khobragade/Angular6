@@ -4,13 +4,14 @@ import { Observable } from 'rxjs';
 import { AuthService } from './service/auth.service';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { UserService } from './service/user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
   
-  constructor(private auth: AuthService,private router:Router){
+  constructor(private auth: AuthService,private user:UserService, private router:Router){
 
   }
   
@@ -18,12 +19,16 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-      return true
-      /* return this.auth.isUserExistsObservable.pipe(map(data=>{
-        console.log(data)
+      return this.user.userDetails.pipe(map(data=>{
         if(data) return true
-        else return false
-      })); */
+        else{
+          this.router.navigate(['login'])
+          return false
+        }
+          
+      }))
+      
+      
 
-  }
+    }
 }

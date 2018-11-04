@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { AuthService } from '../../../service/auth.service';
-import { UserService } from '../../../service/user.service';
+import { AuthService } from '../service/auth.service';
+import { UserService } from '../service/user.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -14,10 +14,9 @@ export class SignupComponent{
 
   myForm: FormGroup;
   genders = ['male', 'female'];
-  usercreated: boolean = false;
   static Async:AuthService
   
-  constructor(private user:UserService,private auth:AuthService) {
+  constructor(private user:UserService,private auth:AuthService,private router:Router) {
 
     this.myForm = new FormGroup(
     {
@@ -36,10 +35,10 @@ export class SignupComponent{
   onSubmit() {
     this.user.signUpUser(this.myForm.value.firstname,this.myForm.value.lastname, this.myForm.value.email, this.myForm.value.password, this.myForm.value.number, this.myForm.value.gender, this.myForm.value.birthday)
       .subscribe(res => {
-        if (res.status == 200)
-          this.usercreated = true;
+        if (res.body.success)
+          this.router.navigate(['/login'])
         else
-          this.usercreated = false;
+          alert(res.body.message)
       });
   }
 

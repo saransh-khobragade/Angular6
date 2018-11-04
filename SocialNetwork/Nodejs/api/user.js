@@ -17,7 +17,7 @@ router.get('/getOneUser', async (req, res)=>{			// get user with id
 	else return res.json({success: false, message: 'email did not recieved'})
 });
 
-/* router.post('/api/user',async (req, res) =>{		
+router.post('/signup',async (req, res) =>{		
 	const{fname, lname, email, password, phone, gender, dob} = req.body
 	const result = await User.findOne({email})
     if(result){
@@ -31,7 +31,7 @@ router.get('/getOneUser', async (req, res)=>{			// get user with id
         }  
         return res.json({success: true, message:'Registration successful'})  
     })
-}); */
+});
 
 
 

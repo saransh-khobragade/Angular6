@@ -42,7 +42,7 @@ export class UserService {
     }
 
     signUpUser(fname,lname, email, password, phone, gender, dob) {
-        return this.http.post<user>('/api/user', {fname,lname, email, password, phone, gender, dob }, { observe: 'response' });
+        return this.http.post<res>('/api/user/signup', {fname,lname, email, password, phone, gender, dob }, { observe: 'response' });
     }
 
     updateUser(fname,lname, email, password, phone, gender, dob){

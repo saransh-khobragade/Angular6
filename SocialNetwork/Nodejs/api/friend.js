@@ -44,7 +44,10 @@ router.post('/invite/send',async (req, res) => {
 	const { myEmail, friendEmail } = req.body
 	
 	Notification.find({ type: 'invite'},{ "creater.email": myEmail},{ "receiver.email": friendEmail },(err,re)=>{
-		if(re.length!==0)	return res.json({ success: false, message: 'invite send :  Request Already sent' })
+		if(re.length!==0){
+			console.log(re)
+			return res.json({ success: false, message: 'invite send :  Request Already sent' })
+		}	
 		else{
 			User.find({email:myEmail},(err,re)=>{
 				if(re[0].fname){

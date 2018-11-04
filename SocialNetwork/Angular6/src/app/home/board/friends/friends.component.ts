@@ -52,7 +52,7 @@ export class FriendsComponent implements OnInit {
             this.refreshList()
           }
           else {
-            alert(data.body.message)
+            //alert(data.body.message)
           }
         })
       }

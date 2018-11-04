@@ -18,7 +18,6 @@ export class HeaderComponent implements OnInit {
     this.userAlive=false
     this.user.userDetails.subscribe( data=>{
       if(data){
-        console.log(data)
         this.userAlive=true
         this.username=data.fname
         this.useremail=data.email
@@ -32,10 +31,7 @@ export class HeaderComponent implements OnInit {
     this.user.userDetails.subscribe(data=>
       {
         if(data){     
-          this.user.userDetails.subscribe(data=>
-          {
-            this.username=data.fname
-          })
+          this.username=data.fname
         }
   })
 

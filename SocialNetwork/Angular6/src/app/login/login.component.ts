@@ -1,7 +1,7 @@
 import { Component, OnInit ,Output,EventEmitter} from '@angular/core';
-import { AuthService } from '../../../service/auth.service';
+import { AuthService } from '../service/auth.service';
 import { Router } from '@angular/router';
-import { UserService } from '../../../service/user.service';
+import { UserService } from '../service/user.service';
 
 
 @Component({
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
               this.user.setUserDetails(res.result)
             })
 
-            this.router.navigate(['home']);
+            this.router.navigate(['home/status']);
           }
           else alert('user session doesnt exist in backend')
         })

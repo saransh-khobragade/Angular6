@@ -1,14 +1,6 @@
-<!-- <form (submit)="loginUser($event)">
-    <input type="text" placeholder="Username" id="username" value={{username}}>
-    <input type="text" placeholder="Password" id="password" value={{password}}>
-    <input type="submit" value="Login">
-    <a [routerLink]="['../signup']"><button>Sign up</button></a>
-</form> -->
-
-
-
-<div class="container h-100 d-flex justify-content-center align-items-center">
-  <div class="">
+<app-header></app-header>
+<div class="Grid-Center">
+  <div class="container">
     <form (submit)="loginUser($event)">
       <div class="form-row">
         <div class="col">
@@ -24,7 +16,7 @@
           <button type="submit" class="btn btn-outline-secondary btn-md btn-block">Login</button>
         </div>
         <div class="col">
-            <a [routerLink]="['../signup']"><button class="btn btn-outline-secondary btn-md btn-block">Sign Up</button></a>
+          <a [routerLink]="['../signup']"><button class="btn btn-outline-secondary btn-md btn-block">Sign Up</button></a>
         </div>
       </div>
     </form>

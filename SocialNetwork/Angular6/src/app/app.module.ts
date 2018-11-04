@@ -11,7 +11,6 @@ import { HeaderComponent } from './home/header/header.component';
 import { ChatComponent } from './home/chat/chat.component';
 import { DetailComponent } from './home/detail/detail.component';
 import { BoardComponent } from './home/board/board.component';
-import { LoginComponent } from './home/board/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './home/board/signup/signup.component';
 import { ProfileComponent } from './home/board/profile/profile.component';
@@ -20,7 +19,7 @@ import { IfUserAliveDirective } from './directive/if-user-alive.directive';
 import { FilterPipe } from './pipe/filter.pipe';
 import { FriendsComponent } from './home/board/friends/friends.component';
 import { MessagesComponent } from './home/board/messages/messages.component';
-
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -51,28 +50,33 @@ import { MessagesComponent } from './home/board/messages/messages.component';
         component: LoginComponent
       },
       {
-        path: 'profile',
-        component:ProfileComponent,
-        canActivate:[AuthGuard]
-      },
-      {
-        path: 'signup',
-        component:SignupComponent,
-        canActivate:[AuthGuard]
-      },
-      {
         path: 'home',
-        component:StatusComponent,
-        canActivate:[AuthGuard]
-      },
-      {
-        path: 'friends',
-        component:FriendsComponent,
-        canActivate:[AuthGuard]
-      },
-      {
-        path: 'messages',
-        component:MessagesComponent,
+        component:HomeComponent,children:[
+                                              {
+                                                path: 'status',
+                                                component:StatusComponent
+                                              },
+                                              {
+                                                path: 'friends',
+                                                component:FriendsComponent,
+                                                canActivate:[AuthGuard]
+                                              },
+                                              {
+                                                path: 'messages',
+                                                component:MessagesComponent,
+                                                canActivate:[AuthGuard]
+                                              },
+                                              {
+                                                path: 'signup',
+                                                component:SignupComponent,
+                                                canActivate:[AuthGuard]
+                                              },
+                                              {
+                                                path: 'profile',
+                                                component:ProfileComponent,
+                                                canActivate:[AuthGuard]
+                                              },
+        ],
         canActivate:[AuthGuard]
       },
       {
@@ -81,8 +85,7 @@ import { MessagesComponent } from './home/board/messages/messages.component';
       },
       {
         path: '**',
-        component:LoginComponent,
-        canActivate:[AuthGuard]
+        component:LoginComponent
       }
     ] 
   

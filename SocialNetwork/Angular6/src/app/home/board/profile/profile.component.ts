@@ -97,7 +97,7 @@ export class ProfileComponent {
         if (res.body.success) {
           console.log("data updated")
           this.user.getUser(this.userDetails.email).subscribe(data => {
-            this.user.setUserDetails(data)
+            this.user.setUserDetails(data.result)
           })
           this.isSave = !this.isSave
         }

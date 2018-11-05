@@ -48,14 +48,17 @@ export class FriendsComponent implements OnInit {
   accept(friendEmail) {
     this.user.userDetails.subscribe(data => {
       if(data){
-        this.user.acceptInvite(data.email, friendEmail).subscribe(data => {
-          if (data.body.success) {
-            this.refreshList()
-          }
-          else {
-            //alert(data.body.message)
-          }
-        })
+        if(data.email!==friendEmail){
+          this.user.acceptInvite(data.email, friendEmail).subscribe(data => {
+            if (data.body.success) {
+              this.refreshList()
+            }
+            else {
+              //alert(data.body.message)
+            }
+          })
+        }
+        
       }
       
     })
@@ -65,15 +68,18 @@ export class FriendsComponent implements OnInit {
   reject(friendEmail) {
     this.user.userDetails.subscribe(data => {
       if(data){
-        this.user.rejectInvite(data.email, friendEmail).subscribe(data => {
-          if (data.body.success) {
-            this.refreshList()
-            this.interaction.CallOtherMethod('rejectEvent')
-          }
-          else {
-            //alert(data.body.message)
-          }
-        })
+        if(data.email!==friendEmail){
+          this.user.rejectInvite(data.email, friendEmail).subscribe(data => {
+            if (data.body.success) {
+              this.refreshList()
+              this.interaction.CallOtherMethod('rejectEvent')
+            }
+            else {
+              //alert(data.body.message)
+            }
+          })
+        }
+        
       }
     })
   }
@@ -81,12 +87,15 @@ export class FriendsComponent implements OnInit {
   unfriend(friendEmail) {
     this.user.userDetails.subscribe(data => {
       if(data){
-        this.user.unfriend(data.email, friendEmail).subscribe(data => {
-          if (data.body.success) {
-            this.refreshList()
-            this.interaction.CallOtherMethod('unfriendEvent')
-          }
-        })
+        if(data.email!==friendEmail){
+          this.user.unfriend(data.email, friendEmail).subscribe(data => {
+            if (data.body.success) {
+              this.refreshList()
+              this.interaction.CallOtherMethod('unfriendEvent')
+            }
+          })
+        }
+        
       }
     })
   }

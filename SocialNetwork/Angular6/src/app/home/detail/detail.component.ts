@@ -52,7 +52,7 @@ export class DetailComponent{
           this.refreshRecommendedList()
         }
         else{
-          alert(res.body.message)
+          //alert(res.body.message)
         }
       
     })

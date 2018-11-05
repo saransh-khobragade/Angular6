@@ -1,13 +1,14 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { UserService } from '../../service/user.service';
 import { AuthService } from '../../service/auth.service';
+import { InteractionService } from 'src/app/service/interaction.service';
 
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.css']
 })
-export class DetailComponent{
+export class DetailComponent implements OnInit{
  
   userDetails={
     id:0,
@@ -23,7 +24,13 @@ export class DetailComponent{
   userAlive:string;
   reccuser:string
 
-  constructor(private user:UserService,private auth:AuthService) { 
+  ngOnInit(){
+    this.interaction.GetotherMethod().subscribe(data=>{
+      if(data==='rejectEvent' ||data=== 'unfriendEvent')
+      this.refreshRecommendedList()
+    })
+  }
+  constructor(private user:UserService,private auth:AuthService,private interaction:InteractionService) { 
     this.refreshRecommendedList()
   }
 

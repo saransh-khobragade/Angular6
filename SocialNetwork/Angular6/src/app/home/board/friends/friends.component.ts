@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/service/user.service';
+import { InteractionService } from 'src/app/service/interaction.service';
 
 @Component({
   selector: 'app-friends',
@@ -11,7 +12,7 @@ export class FriendsComponent implements OnInit {
   inviteList = []
   friendList = []
 
-  constructor(private user: UserService) { }
+  constructor(private user: UserService,private interaction:InteractionService) { }
 
   ngOnInit() {
     this.refreshList()
@@ -67,6 +68,7 @@ export class FriendsComponent implements OnInit {
         this.user.rejectInvite(data.email, friendEmail).subscribe(data => {
           if (data.body.success) {
             this.refreshList()
+            this.interaction.CallOtherMethod('rejectEvent')
           }
           else {
             //alert(data.body.message)
@@ -82,6 +84,7 @@ export class FriendsComponent implements OnInit {
         this.user.unfriend(data.email, friendEmail).subscribe(data => {
           if (data.body.success) {
             this.refreshList()
+            this.interaction.CallOtherMethod('unfriendEvent')
           }
         })
       }

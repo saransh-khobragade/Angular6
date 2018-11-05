@@ -41,8 +41,8 @@ export class HeaderComponent implements OnInit {
     this.auth.logout(this.useremail).subscribe(data=>{
       if(data.success){
         sessionStorage.setItem("user",null)
-        this.user.setUserDetails(null)
         this.router.navigate(['login']);
+        location.reload();
       }
       else alert(data.message)
     })

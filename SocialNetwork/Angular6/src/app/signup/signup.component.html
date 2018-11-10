@@ -90,17 +90,11 @@
         <button type="button" (click)="uploadFile()" class="btn btn-md m-2">
           <span *ngIf="uploadValue===0">Upload</span>
           <span *ngIf="uploadValue===100">Uploaded Successfuly</span>
-          <meter value="{{uploadValue}}" min="0" max="100"></meter>
+          <meter *ngIf="uploadValue!==0" value="{{uploadValue}}" min="0" max="100"></meter>
         </button>
-        <img class="img-fluid" src="/api/image/a042a0927b96de4879fe909aa0be7b77.JPG">
-
-
-
-
+        <img *ngIf="uploadValue===100" class="img-fluid" src="/api/image/{{uploadedImageName}}">
       </div>
     </div>
-
-
 
 
     <div class="form-group row ">

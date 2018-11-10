@@ -5,10 +5,12 @@ const auth = require('./auth')
 const user = require('./user')
 const friend = require('./friend')
 const notification = require('./notification')
+const upload = require('./upload')
 
 app.use('/api/auth', auth)
 app.use('/api/user', user)
 app.use('/api/friend', friend)
 app.use('/api/notification', notification)
+app.use('/api/upload', upload)
 
 module.exports = app;

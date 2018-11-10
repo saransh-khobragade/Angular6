@@ -91,7 +91,7 @@ export class SignupComponent {
 
 
       fd.append('file', this.selectedFile, this.selectedFile.name)
-      this.http.post<res>('/api/upload', fd, { reportProgress: true, observe: 'response' })
+      this.http.post<res>('/api/upload/uploadOneFile', fd, { reportProgress: true, observe: 'response' })
         .subscribe(data => {
 
           if (data.body.success) {

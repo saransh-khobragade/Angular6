@@ -6,25 +6,30 @@ const Grid = require('gridfs-stream');
 const express = require('express')
 const router = express.Router();
 
-const conn = require('../module/connection')
+const mongoose = require('mongoose');
+const app = express()
+
+//const conn = require('../module/connection')
 
 
-/* // Mongo URI
+// Mongo URI
 const mongoURI = 'mongodb://localhost:27017/Angular6';
 
 // Create mongo connection
-const conn = mongoose.createConnection(mongoURI); */
+const conn = mongoose.createConnection(mongoURI);
 
 // Init gfs
 let gfs;
-var db = conn.connection;
 
-gfs = Grid(db, conn.mongo);
-gfs.collection('uploads');
+conn.once('open', () => {
+  // Init stream
+  gfs = Grid(conn.db, mongoose.mongo);
+  gfs.collection('uploads');
+});
 
 // Create storage engine
 const storage = new GridFsStorage({
-  url: 'mongodb://localhost:27017/Angular6',
+  url: mongoURI,
   file: (req, file) => {
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {
@@ -46,18 +51,21 @@ const upload = multer({ storage });
 
 // @route POST /upload
 // @desc  Uploads file to DB
-router.post('/uploadOneFile', upload.single('file'), (req, res) => {
-  if(res){
-    return res.json({ success:true,result: req.file.filename });
+app.post('/api/upload/uploadOneFile', upload.single('file'), (req, res) => {
+  if(req.file){
+    if(res){
+      return res.json({ success:true,result: req.file.filename });
+    }
+    else return res.json({ success:false,message: "upload fail"});
   }
-  else return res.json({ success:false,message: "upload fail"});
+  else return res.json({ success:false,message: "filename not recieved"});
 
 });
 
 
 // @route GET /
 // @desc Loads form
-router.get('/image/:filename', (req, res) => {
+app.get('/api/upload/image/:filename', (req, res) => {
   gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
     // Check if file
     if (!file || file.length === 0) {
@@ -82,7 +90,7 @@ router.get('/image/:filename', (req, res) => {
 
 // @route DELETE /files/:id
 // @desc  Delete file
-router.delete('/image/:filename',(req, res) => {
+app.get('/files',(req, res) => {
   gfs.remove({ _id: req.params.id, root: 'uploads' }, (err, gridStore) => {
     if (err) {
       return res.status(404).json({ err: err });
@@ -128,5 +136,8 @@ app.get('/files/:filename', (req, res) => {
 // @route GET /image/:filename
 // @desc Display Image */
 
+/* 
+module.exports = router; */
+const port = 1234;
 
-module.exports = router;
+app.listen(port, () => console.log(`Server started on port ${port}`));

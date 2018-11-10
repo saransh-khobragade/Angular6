@@ -92,7 +92,7 @@
           <span *ngIf="uploadValue===100">Uploaded Successfuly</span>
           <meter *ngIf="uploadValue!==0" value="{{uploadValue}}" min="0" max="100"></meter>
         </button>
-        <img *ngIf="uploadValue===100" class="img-fluid" src="/api/image/{{uploadedImageName}}">
+        <img *ngIf="uploadValue===100" class="img-fluid" src="/api/upload/image/{{uploadedImageName}}">
       </div>
     </div>
 

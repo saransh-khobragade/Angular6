@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AuthService } from './service/auth.service';
-import { UserService } from './service/user.service'
+import { UserService } from './service/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule,FormsModule} from '@angular/forms';
 import { HeaderComponent } from './home/header/header.component';

@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../service/auth.service';
 import { UserService } from '../service/user.service';
 import { Router } from '@angular/router';
+import { HttpClient,HttpParams,HttpEventType } from '@angular/common/http'
 
 
 @Component({
@@ -15,8 +16,13 @@ export class SignupComponent{
   myForm: FormGroup;
   genders = ['male', 'female'];
   static Async:AuthService
+  selectedFile:File
+  uploadValue:number
   
-  constructor(private user:UserService,private auth:AuthService,private router:Router) {
+  constructor(private user:UserService,
+    private auth:AuthService,
+    private router:Router,
+    private http:HttpClient) {
 
     this.myForm = new FormGroup(
     {
@@ -30,6 +36,8 @@ export class SignupComponent{
     'gender': new FormControl('Male',Validators.required),
     },{validators:this.confirmPassValidator}
     );
+
+    this.uploadValue=0
   }
 
   onSubmit() {
@@ -66,6 +74,27 @@ export class SignupComponent{
     }
     );
    }
+
+  onFileSelected(event){
+    this.selectedFile=event.target.files[0]
+  }
+  uploadFile(){
+    this.uploadValue=0
+    const fd=new FormData();
+    if(this.selectedFile!==undefined){
+      fd.append('file',this.selectedFile,this.selectedFile.name)
+      this.http.post('/api/upload', fd,{reportProgress:true,observe:'events'})
+      .subscribe(event=>{
+        if(event.type===HttpEventType.UploadProgress){
+          this.uploadValue=event.loaded/event.total*100
+        }
+        else{
+          //console.log(event)
+        }
+      });
+    }
+    
+  }
 
   
 }

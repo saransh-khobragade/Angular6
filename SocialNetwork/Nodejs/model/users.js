@@ -1,4 +1,4 @@
-const mongoose = require('../module/Connection')
+const mongoose = require('../module/connection')
 const userSeq = require('mongoose-sequence') (mongoose)
 //const Notification = require('./Notification')
 

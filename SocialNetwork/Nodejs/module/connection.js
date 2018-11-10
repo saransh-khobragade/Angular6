@@ -1,14 +1,14 @@
 const conn = require('mongoose')
-var mongoose = false;
 conn.Promise = Promise
+
 
 conn.connect('mongodb://localhost:27017/Angular6', { useNewUrlParser: true })
 conn.set('useCreateIndexs', true);
 // When successfully connected
 conn.connection.on('connected', function () {  
   console.log('MongoDb started :)');
-  mongoose = true;
 });
+
 
 // If the connection throws an error
 conn.connection.on('error',function (err) {  
@@ -27,5 +27,5 @@ process.on('SIGINT', function() {
     process.exit(0); 
   }); 
 });
-exports.mongoose = mongoose
+
 module.exports = conn

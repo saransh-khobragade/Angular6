@@ -2,20 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient,HttpParams } from '@angular/common/http'
 import { ReplaySubject } from '../../../node_modules/rxjs';
 
-interface user {
-    id:number,
-    fname: string,
-    lname: string,
-    email:string,
-    phone:number
-    gender:string,
-    dob:string
-  }
-interface res{
-    success:boolean,
-    message:string,
-    result:any
-}
+interface user {  id:number,  fname: string,  lname: string,  email:string,  phone:number,  gender:string,  dob:string,  profilePic:string}
+
+interface res{    success:boolean,    message:string,    result:any }
 
 
 @Injectable({

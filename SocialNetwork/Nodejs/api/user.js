@@ -12,7 +12,7 @@ router.get('/getOneUser', async (req, res)=>{			// get user with id
 				return res.json({success: false, message: 'User not found'})
 			}
 			return res.json({success: true, result: user})		
-		}).select('fname lname email phone gender dob')
+		}).select('fname lname email phone gender dob profilePic')
 	}
 	else return res.json({success: false, message: 'email did not recieved'})
 });

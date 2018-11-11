@@ -34,6 +34,20 @@ router.post('/signup',async (req, res) =>{
 });
 
 
+router.get('/getProfilePic', async (req, res)=>{			// get user with id
+	if(req.query.email){
+		User.findOne({email:req.query.email}, function (err, user) {
+			if(err) {
+				return res.json({success: false, message: 'Something went wrong'})
+			}
+			else if(!user){
+				return res.json({success: false, message: 'User not found'})
+			}
+			return res.json({success: true, result: user})		
+		}).select('profilePic')
+	}
+	else return res.json({success: false, message: 'email did not recieved'})
+});
 
 /* exports.login = async (req,res)=>{		//login API
     const{email,password}=req.body

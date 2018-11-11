@@ -83,4 +83,8 @@ export class UserService {
         return this.http.post<res>('/api/status/setStatus', {statusText:status, createrEmail:userEmail}, { observe: 'response' });
     }
 
+    getProfilePic(email){
+        return this.http.get<res>('/api/user/getProfilePic',{ observe: 'response',params:{email:email}});
+    }
+
 }

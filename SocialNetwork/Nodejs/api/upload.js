@@ -90,13 +90,16 @@ router.get('/image/:filename', (req, res) => {
 
 // @route DELETE /files/:id
 // @desc  Delete file
-app.get('/files',(req, res) => {
+router.delete('/deleteFiles',(req, res) => {
+  
   gfs.remove({ _id: req.params.id, root: 'uploads' }, (err, gridStore) => {
-    if (err) {
-      return res.status(404).json({ err: err });
+    if (!err) {
+      return res.json({ success:true });
+    }
+    else{
+      return res.json({ success:false,err:err });
     }
 
-    res.redirect('/');
   });
 });
 

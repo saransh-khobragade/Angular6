@@ -13,6 +13,8 @@ export class StatusComponent implements OnInit {
   userAlive:Boolean
   userDetails:user
 
+  status=[]
+
   constructor(private user:UserService) {
     
     this.user.userDetails.subscribe( data=>{
@@ -24,6 +26,25 @@ export class StatusComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.refreshStatus()
+  }
+
+  refreshStatus(){
+    this.user.getAllStatus().subscribe(data=>{
+      if(data.body.success)
+        this.status=[]
+        for(let st in data.body.result){
+          this.status.push({name:data.body.result[st].creater.name,status:data.body.result[st].status})
+        }      
+    })
+  }
+
+  setStatus(status){
+    this.user.setStatus(status,this.userDetails.email).subscribe(data=>{
+      if(data.body.success){
+        this.refreshStatus()
+      }
+    })
   }
 
 }

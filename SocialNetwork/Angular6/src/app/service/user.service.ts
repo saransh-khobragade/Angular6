@@ -75,4 +75,12 @@ export class UserService {
         return this.http.delete<res>('/api/friend/unfriend',{ observe: 'response', params:{myEmail:UserEmail,friendEmail:friendEmail}  });
     }
 
+    getAllStatus(){
+        return this.http.get<res>('/api/status/getAllStatus',{ observe: 'response'});
+    }
+
+    setStatus(status,userEmail){
+        return this.http.post<res>('/api/status/setStatus', {statusText:status, createrEmail:userEmail}, { observe: 'response' });
+    }
+
 }

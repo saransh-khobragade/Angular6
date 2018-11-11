@@ -18,16 +18,16 @@ router.get('/getOneUser', async (req, res)=>{			// get user with id
 });
 
 router.post('/signup',async (req, res) =>{		
-	const{fname, lname, email, password, phone, gender, dob} = req.body
+	const{fname, lname, email, password, phone, gender, dob,profilePic} = req.body
 	const result = await User.findOne({email})
     if(result){
         return res.json({success: false, message: 'User already exists'})
     }
-
-	const user = new User({fname, lname, email, password, phone, gender, dob})
+	
+	const user = new User({fname, lname, email, password, phone, gender, dob,profilePic})
 	user.save(function (err) {  
         if (err) {  
-            return res.json({success: false, message:'Something went wrong'})  
+            return res.json({success: false, message:err})  
         }  
         return res.json({success: true, message:'Registration successful'})  
     })

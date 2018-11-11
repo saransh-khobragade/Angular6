@@ -41,8 +41,8 @@ export class UserService {
         this.user.next(user)
     }
 
-    signUpUser(fname,lname, email, password, phone, gender, dob) {
-        return this.http.post<res>('/api/user/signup', {fname,lname, email, password, phone, gender, dob }, { observe: 'response' });
+    signUpUser(fname,lname, email, password, phone, gender, dob,profilePic) {
+        return this.http.post<res>('/api/user/signup', {fname,lname, email, password, phone, gender, dob,profilePic }, { observe: 'response' });
     }
 
     updateUser(fname,lname, email, password, phone, gender, dob){

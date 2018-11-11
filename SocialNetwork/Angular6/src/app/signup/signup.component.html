@@ -85,7 +85,7 @@
     <div class="form-group row text-center">
       <label for="inputPassword" class="col-sm-6  col-form-label text-center">Profile Photo</label>
       <div class="col-sm-6">
-        <input style="display:none" type="file" (change)="onFileSelected($event)" #fileInput>
+        <input style="display:none" type="file" (change)="onFileSelected($event)" #fileInput formControlName="profilePic">
         <button type="button" (click)="fileInput.click()" class="btn btn-md m-2">Pick File</button>
         <button type="button" (click)="uploadFile()" class="btn btn-md m-2">
           <span *ngIf="uploadValue===0">Upload</span>

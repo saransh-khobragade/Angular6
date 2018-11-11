@@ -40,6 +40,7 @@ export class SignupComponent {
         'number': new FormControl('', Validators.required),
         'birthday': new FormControl('', Validators.required),
         'gender': new FormControl('Male', Validators.required),
+        'profilePic': new FormControl('', Validators.required),
       }, { validators: this.confirmPassValidator }
     );
 
@@ -47,7 +48,15 @@ export class SignupComponent {
   }
 
   onSubmit() {
-    this.user.signUpUser(this.myForm.value.firstname, this.myForm.value.lastname, this.myForm.value.email, this.myForm.value.password, this.myForm.value.number, this.myForm.value.gender, this.myForm.value.birthday)
+    this.user.signUpUser(
+      this.myForm.value.firstname,
+      this.myForm.value.lastname,
+      this.myForm.value.email,
+      this.myForm.value.password,
+      this.myForm.value.number,
+      this.myForm.value.gender,
+      this.myForm.value.birthday,
+      this.uploadedImageName)
       .subscribe(res => {
         if (res.body.success)
           this.router.navigate(['/login'])

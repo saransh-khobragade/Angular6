@@ -14,7 +14,7 @@ const app = express()
 
 // Mongo URI
 const mongoURI = 'mongodb://localhost:27017/Angular6';
-
+//const mongoURI='mongodb://saransh98:saransh989@ds247101.mlab.com:47101/angular6'
 // Create mongo connection
 const conn = mongoose.createConnection(mongoURI);
 

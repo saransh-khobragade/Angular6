@@ -8,6 +8,7 @@ import { ProfileComponent } from './home/board/profile/profile.component';
 import { StatusComponent } from './home/board/status/status.component';
 import { AuthGuard } from './auth.guard';
 import { ChatComponent } from './home/board/chat/chat.component';
+import { DetailComponent } from './home/detail/detail.component';
 
 const APP_ROUTES: Routes = [
     {
@@ -43,6 +44,11 @@ const APP_ROUTES: Routes = [
             {
                 path: 'chat',
                 component: ChatComponent,
+                canActivate: [AuthGuard]
+            },
+            {
+                path: 'detail',
+                component: DetailComponent,
                 canActivate: [AuthGuard]
             },
         ],

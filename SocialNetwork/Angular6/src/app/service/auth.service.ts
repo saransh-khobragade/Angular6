@@ -22,7 +22,8 @@ interface isLoggedIn {
 interface res{
   success: boolean,
   message:string,
-  result:any
+  result:any,
+  status:boolean
 }
 
 

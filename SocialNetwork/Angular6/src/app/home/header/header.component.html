@@ -19,6 +19,10 @@
                 <a class="nav-link" [routerLink]="['/home/detail']">Details<span> </span><span class="badge badge-secondary badge-pill">5</span></a>
             </li>
 
+            <li class="nav-item d-lg-none" *ngIf="userAlive" >
+                    <a class="nav-link" [routerLink]="['/home/online']">Online Users<span> </span><span class="badge badge-secondary badge-pill">5</span></a>
+            </li>
+
         </ul>
         <form class="form-inline my-2 my-lg-0" *ngIf="userAlive">
             <ul class="navbar-nav mr-auto">
